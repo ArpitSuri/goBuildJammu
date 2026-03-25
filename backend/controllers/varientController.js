@@ -54,7 +54,7 @@ export const createVariant = async (req, res) => {
     try {
         const {
             product,
-            attributes,
+            attributes = [],
             sku,
             price,
             discountPrice,
@@ -62,9 +62,9 @@ export const createVariant = async (req, res) => {
             bulkPricing
         } = req.body;
 
-        if (!product || !attributes || attributes.length === 0 || !price) {
+        if (!product || !price) {
             return res.status(400).json({
-                message: "Product, attributes, and price are required"
+                message: "Product and price are required"
             });
         }
 
@@ -74,7 +74,36 @@ export const createVariant = async (req, res) => {
             return res.status(400).json({ message: "Invalid product" });
         }
 
-        // ✅ Normalize attributes (IMPORTANT for duplicate check)
+        // 🔥 CASE 1: NO ATTRIBUTES (Simple Product)
+        if (!attributes || attributes.length === 0) {
+
+            // ❌ Prevent multiple variants for simple product
+            const existing = await Variant.findOne({ product });
+
+            if (existing) {
+                return res.status(400).json({
+                    message: "Simple product can only have one variant"
+                });
+            }
+
+            const variant = await Variant.create({
+                product,
+                attributes: [],
+                sku,
+                price,
+                discountPrice,
+                stock: stock || 0,
+                bulkPricing: bulkPricing || []
+            });
+
+            return res.status(201).json({
+                message: "Variant created (simple product)",
+                variant
+            });
+        }
+
+        // 🔥 CASE 2: WITH ATTRIBUTES (Variable Product)
+
         const normalizedAttributes = attributes
             .map(a => ({
                 attribute: a.attribute.toString(),
@@ -82,7 +111,6 @@ export const createVariant = async (req, res) => {
             }))
             .sort((a, b) => a.attribute.localeCompare(b.attribute));
 
-        // ✅ Prevent duplicate variant combinations
         const existing = await Variant.findOne({
             product,
             attributes: normalizedAttributes
@@ -210,5 +238,59 @@ export const updateStock = async (req, res) => {
 
     } catch (err) {
         res.status(500).json({ message: err.message });
+    }
+};
+
+export const getTopDiscountVariants = async () => {
+    try {
+        const variants = await Variant.aggregate([
+            {
+                // Only valid discounted variants
+                $match: {
+                    discountPrice: { $exists: true, $ne: null },
+                    isActive: true
+                }
+            },
+            {
+                // Calculate discount percentage
+                $addFields: {
+                    discountPercent: {
+                        $multiply: [
+                            {
+                                $divide: [
+                                    { $subtract: ["$price", "$discountPrice"] },
+                                    "$price"
+                                ]
+                            },
+                            100
+                        ]
+                    }
+                }
+            },
+            {
+                // Sort highest discount first
+                $sort: { discountPercent: -1 }
+            },
+            {
+                // Limit to 10
+                $limit: 10
+            },
+            {
+                // Optional: populate product
+                $lookup: {
+                    from: "products",
+                    localField: "product",
+                    foreignField: "_id",
+                    as: "product"
+                }
+            },
+            {
+                $unwind: "$product"
+            }
+        ]);
+
+        return variants;
+    } catch (error) {
+        throw error;
     }
 };

@@ -7,10 +7,9 @@ const orderSchema = new Schema({
         {
             product: mongoose.Schema.Types.ObjectId,
             variant: mongoose.Schema.Types.ObjectId,
-
+            image: String, // <--- ADD THIS FIELD
             name: String,
             attributes: Object,
-
             quantity: Number,
             price: Number
         }
@@ -22,6 +21,13 @@ const orderSchema = new Schema({
         type: String,
         enum: ["pending", "confirmed", "assigned", "picked", "shipped", "delivered", "cancelled"],
         default: "pending"
+    },
+
+    // ✅ ADDED THIS FIELD
+    paymentMethod: {
+        type: String,
+        enum: ["COD", "Online"],
+        required: true
     },
 
     address: Object,

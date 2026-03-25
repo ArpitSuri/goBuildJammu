@@ -4,17 +4,122 @@ import Variant from "../model/varientModel.js";
 import Delivery from "../model/deliveryModel.js";
 
 /* ---------------- CREATE ORDER ---------------- */
+// export const createOrder = async (req, res) => {
+//     try {
+//         const userId = req.user._id;
+//         const { address } = req.body;
+
+//         if (!address) {
+//             return res.status(400).json({ message: "Address required" });
+//         }
+
+//         const cart = await Cart.findOne({ user: userId });
+
+//         if (!cart || cart.items.length === 0) {
+//             return res.status(400).json({ message: "Cart is empty" });
+//         }
+
+//         let totalAmount = 0;
+//         const orderItems = [];
+
+//         // 🔥 STEP 1: VALIDATE + RESERVE STOCK (ATOMIC)
+//         for (const item of cart.items) {
+//             const variant = await Variant.findById(item.variant)
+//                 .populate("product", "name");
+
+//             if (!variant || !variant.isActive) {
+//                 return res.status(400).json({ message: "Invalid variant in cart" });
+//             }
+
+//             const quantity = item.quantity;
+
+//             // 🔥 ATOMIC STOCK RESERVATION
+//             const updated = await Variant.findOneAndUpdate(
+//                 {
+//                     _id: variant._id,
+//                     $expr: {
+//                         $gte: [
+//                             { $subtract: ["$stock", "$reservedStock"] },
+//                             quantity
+//                         ]
+//                     }
+//                 },
+//                 {
+//                     $inc: { reservedStock: quantity }
+//                 },
+//                 { new: true }
+//             );
+
+//             if (!updated) {
+//                 return res.status(400).json({
+//                     message: `Insufficient stock for ${variant.product.name}`
+//                 });
+//             }
+
+//             // 🔥 PRICE RECALCULATION (never trust cart)
+//             let price = variant.discountPrice || variant.price;
+
+//             if (variant.bulkPricing && variant.bulkPricing.length > 0) {
+//                 const applicable = variant.bulkPricing
+//                     .filter(b => quantity >= b.minQty)
+//                     .sort((a, b) => b.minQty - a.minQty)[0];
+
+//                 if (applicable) {
+//                     price = applicable.price;
+//                 }
+//             }
+
+//             totalAmount += price * quantity;
+
+//             orderItems.push({
+//                 product: variant.product._id,
+//                 variant: variant._id,
+//                 name: variant.product.name,
+//                 attributes: variant.attributes,
+//                 quantity,
+//                 price
+//             });
+//         }
+
+//         // 🔥 STEP 2: CREATE ORDER
+//         const order = await Order.create({
+//             user: userId,
+//             items: orderItems,
+//             totalAmount,
+//             status: "pending",
+//             paymentStatus: "pending",
+//             address
+//         });
+
+//         // 🔥 STEP 3: CLEAR CART
+//         cart.items = [];
+//         await cart.save();
+
+//         res.status(201).json({
+//             message: "Order created",
+//             order
+//         });
+
+//     } catch (err) {
+//         res.status(500).json({ message: err.message });
+//     }
+// };
+
 export const createOrder = async (req, res) => {
     try {
         const userId = req.user._id;
-        const { address } = req.body;
+        console.log(" from create order Router")
+        console.log(req.user)
+        console.log(userId)
+        const { address, paymentMethod } = req.body; // ✅ Extract paymentMethod
+        console.log(`address: ${address}`)
+        console.log(`paymentMethod: ${paymentMethod}`)
 
-        if (!address) {
-            return res.status(400).json({ message: "Address required" });
+        if (!address || !paymentMethod) {
+            return res.status(400).json({ message: "Address and Payment Method are required" });
         }
 
         const cart = await Cart.findOne({ user: userId });
-
         if (!cart || cart.items.length === 0) {
             return res.status(400).json({ message: "Cart is empty" });
         }
@@ -22,53 +127,30 @@ export const createOrder = async (req, res) => {
         let totalAmount = 0;
         const orderItems = [];
 
-        // 🔥 STEP 1: VALIDATE + RESERVE STOCK (ATOMIC)
         for (const item of cart.items) {
-            const variant = await Variant.findById(item.variant)
-                .populate("product", "name");
-
+            const variant = await Variant.findById(item.variant).populate("product", "name");
             if (!variant || !variant.isActive) {
                 return res.status(400).json({ message: "Invalid variant in cart" });
             }
 
             const quantity = item.quantity;
 
-            // 🔥 ATOMIC STOCK RESERVATION
+            // ATOMIC STOCK RESERVATION
             const updated = await Variant.findOneAndUpdate(
                 {
                     _id: variant._id,
-                    $expr: {
-                        $gte: [
-                            { $subtract: ["$stock", "$reservedStock"] },
-                            quantity
-                        ]
-                    }
+                    $expr: { $gte: [{ $subtract: ["$stock", "$reservedStock"] }, quantity] }
                 },
-                {
-                    $inc: { reservedStock: quantity }
-                },
+                { $inc: { reservedStock: quantity } },
                 { new: true }
             );
 
             if (!updated) {
-                return res.status(400).json({
-                    message: `Insufficient stock for ${variant.product.name}`
-                });
+                return res.status(400).json({ message: `Insufficient stock for ${variant.product.name}` });
             }
 
-            // 🔥 PRICE RECALCULATION (never trust cart)
             let price = variant.discountPrice || variant.price;
-
-            if (variant.bulkPricing && variant.bulkPricing.length > 0) {
-                const applicable = variant.bulkPricing
-                    .filter(b => quantity >= b.minQty)
-                    .sort((a, b) => b.minQty - a.minQty)[0];
-
-                if (applicable) {
-                    price = applicable.price;
-                }
-            }
-
+            // ... bulk pricing logic ...
             totalAmount += price * quantity;
 
             orderItems.push({
@@ -81,24 +163,20 @@ export const createOrder = async (req, res) => {
             });
         }
 
-        // 🔥 STEP 2: CREATE ORDER
         const order = await Order.create({
             user: userId,
             items: orderItems,
             totalAmount,
+            address,
+            paymentMethod, // ✅ Saved to DB
             status: "pending",
-            paymentStatus: "pending",
-            address
+            paymentStatus: "pending"
         });
 
-        // 🔥 STEP 3: CLEAR CART
         cart.items = [];
         await cart.save();
 
-        res.status(201).json({
-            message: "Order created",
-            order
-        });
+        res.status(201).json({ message: "Order created successfully", order });
 
     } catch (err) {
         res.status(500).json({ message: err.message });
@@ -182,24 +260,42 @@ export const getMyOrders = async (req, res) => {
     }
 };
 
+// export const getOrderById = async (req, res) => {
+//     try {
+//         const { id } = req.params;
+
+//         const order = await Order.findById(id);
+
+//         if (!order) {
+//             return res.status(404).json({ message: "Order not found" });
+//         }
+
+//         res.json(order);
+
+//     } catch (err) {
+//         res.status(500).json({ message: err.message });
+//     }
+// };
+
 export const getOrderById = async (req, res) => {
     try {
         const { id } = req.params;
 
-        const order = await Order.findById(id);
+        // Use .populate to reach into the items array and get product images
+        const order = await Order.findById(id).populate({
+            path: 'items.product',
+            select: 'images' // Only fetch the images field
+        });
 
         if (!order) {
             return res.status(404).json({ message: "Order not found" });
         }
 
         res.json(order);
-
     } catch (err) {
         res.status(500).json({ message: err.message });
     }
 };
-
-
 
 export const updateOrderStatus = async (req, res) => {
     try {

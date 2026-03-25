@@ -34,7 +34,7 @@ export const isAuthenticated = async (req, res, next) => {
 /* ---------------- ADMIN CHECK ---------------- */
 export const isAdmin = (req, res, next) => {
     try {
-        console.log("USER IN ADMIN CHECK:", req.user);
+        // console.log("USER IN ADMIN CHECK:", req.user);
 
         if (!req.user || !Array.isArray(req.user.role)) {
             // console.log("❌ role missing or invalid");
@@ -64,7 +64,7 @@ export const isSupplier = (req, res, next) => {
 /* ---------------- ADMIN CHECK ---------------- */
 export const isDelivery = (req, res, next) => {
     try {
-        console.log("USER IN DELIVERY CHECK:", req.user);
+        // console.log("USER IN DELIVERY CHECK:", req.user);
 
         if (!req.user || !Array.isArray(req.user.role)) {
             // console.log("❌ role missing or invalid");

@@ -2,19 +2,66 @@ import Category from "../model/categoryModel.js";
 import slugify from "slugify";
 
 /* ---------------- CREATE CATEGORY (ADMIN) ---------------- */
+// export const createCategory = async (req, res) => {
+//     try {
+//         const { name, parent } = req.body;
+//         console.log(req.body)
+
+//         if (!name) {
+//             return res.status(400).json({ message: "Name is required" });
+//         }
+
+//         // Generate slug
+//         let slug = slugify(name, { lower: true });
+
+//         // Prevent duplicate slug
+//         const existing = await Category.findOne({ slug });
+//         if (existing) {
+//             slug = `${slug}-${Date.now()}`;
+//         }
+
+//         let level = 0;
+
+//         // If parent exists → calculate level
+//         if (parent) {
+//             const parentCategory = await Category.findById(parent);
+
+//             if (!parentCategory) {
+//                 return res.status(400).json({ message: "Invalid parent category" });
+//             }
+
+//             level = parentCategory.level + 1;
+//         }
+
+//         const category = await Category.create({
+//             name,
+//             slug,
+//             parent: parent || null,
+//             level
+//         });
+
+//         res.status(201).json({
+//             message: "Category created",
+//             category
+//         });
+
+//     } catch (err) {
+//         console.log(err);
+//         res.status(500).json({ message: err.message });
+
+//     }
+// };
+
 export const createCategory = async (req, res) => {
     try {
-        const { name, parent } = req.body;
-        console.log(req.body)
+        const { name, parent, image } = req.body;
 
         if (!name) {
             return res.status(400).json({ message: "Name is required" });
         }
 
-        // Generate slug
         let slug = slugify(name, { lower: true });
 
-        // Prevent duplicate slug
         const existing = await Category.findOne({ slug });
         if (existing) {
             slug = `${slug}-${Date.now()}`;
@@ -22,14 +69,11 @@ export const createCategory = async (req, res) => {
 
         let level = 0;
 
-        // If parent exists → calculate level
         if (parent) {
             const parentCategory = await Category.findById(parent);
-
             if (!parentCategory) {
                 return res.status(400).json({ message: "Invalid parent category" });
             }
-
             level = parentCategory.level + 1;
         }
 
@@ -37,7 +81,8 @@ export const createCategory = async (req, res) => {
             name,
             slug,
             parent: parent || null,
-            level
+            level,
+            image: image || null   // ✅ ADD THIS
         });
 
         res.status(201).json({
@@ -46,17 +91,14 @@ export const createCategory = async (req, res) => {
         });
 
     } catch (err) {
-        console.log(err);
         res.status(500).json({ message: err.message });
-
     }
 };
-
 
 export const updateCategory = async (req, res) => {
     try {
         const { id } = req.params;
-        const { name, parent, isActive } = req.body;
+        const { name, parent, isActive, image } = req.body;
 
         const category = await Category.findById(id);
 
@@ -82,6 +124,9 @@ export const updateCategory = async (req, res) => {
 
             category.parent = parent;
             category.level = parentCategory.level + 1;
+        }
+        if (image) {
+            category.image = image;   // ✅ ADD THIS
         }
 
         await category.save();

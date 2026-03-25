@@ -164,16 +164,27 @@ export const removeCartItem = async (req, res) => {
     }
 };
 
-/* ---------------- GET CART ---------------- */
+
+/* ---------------- GET CART---------------- */
 export const getCart = async (req, res) => {
     try {
         const userId = req.user._id;
 
         const cart = await Cart.findOne({ user: userId })
-            .populate("items.variant");
+            .populate({
+                path: "items.variant",
+                populate: {
+                    path: "product",
+                    // We specifically select 'images' so we have the URLs
+                    select: "name images brand"
+                }
+            });
 
-        res.json(cart || { items: [] });
+        if (!cart) {
+            return res.json({ items: [] });
+        }
 
+        res.json(cart);
     } catch (err) {
         res.status(500).json({ message: err.message });
     }
