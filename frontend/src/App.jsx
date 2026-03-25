@@ -22,6 +22,8 @@ import AdminOrders from "./pages/admin/AdminOrder";
 import AdminUsers from "./pages/admin/AdminUsers";
 import SupplierPage from "./pages/admin/AdminSuppliers";
 import DeliveryPage from "./pages/DeliveryPage";
+import DeliveryDashboard from "./pages/delivery/DeliveryDashboard";
+import DeliveryLayout from "./pages/delivery/DeliveryLayout";
 
 
 /**
@@ -68,6 +70,18 @@ export default function App() {
           <Route path="suppliers" element={<SupplierPage />}/>
           <Route path="delivery" element={<DeliveryPage />} />
           
+        </Route>
+
+        <Route
+          path="/delivery"
+          element={
+            <ProtectedRoute allowedRole="delivery">
+              <DeliveryLayout />
+            </ProtectedRoute>
+          }
+        >
+         <Route index element={<DeliveryDashboard />} />
+
         </Route>
 
         {/* Catch-all */}

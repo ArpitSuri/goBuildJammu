@@ -375,62 +375,122 @@ export const getOrderDetailsAdmin = async (req, res) => {
 
 
 
-/* ---------------- ASSIGN DELIVERY AGENT (ADMIN) ---------------- */
+// /* ---------------- ASSIGN DELIVERY AGENT (ADMIN) ---------------- */
+// export const assignDeliveryAgent = async (req, res) => {
+//     try {
+//         const { orderId } = req.params;
+//         const { deliveryId } = req.body;
+
+//         // 1. Validate input
+//         if (!deliveryId) {
+//             return res.status(400).json({ message: "Delivery agent ID required" });
+//         }
+
+//         // 2. Get order
+//         const order = await Order.findById(orderId);
+
+//         if (!order) {
+//             return res.status(404).json({ message: "Order not found" });
+//         }
+
+//         // 🚫 Prevent assigning cancelled/delivered orders
+//         if (["cancelled", "delivered"].includes(order.status)) {
+//             return res.status(400).json({
+//                 message: "Cannot assign delivery to this order"
+//             });
+//         }
+
+//         // 🚫 Prevent re-assignment (optional strict rule)
+//         if (order.deliveryAgent) {
+//             return res.status(400).json({
+//                 message: "Delivery agent already assigned"
+//             });
+//         }
+
+//         // 3. Get delivery agent
+//         const delivery = await Delivery.findById(deliveryId);
+
+//         if (!delivery || !delivery.isActive) {
+//             return res.status(404).json({ message: "Invalid delivery agent" });
+//         }
+
+//         // 🚫 Check availability
+//         if (!delivery.isAvailable) {
+//             return res.status(400).json({
+//                 message: "Delivery agent is not available"
+//             });
+//         }
+
+//         // 4. Assign
+//         order.deliveryAgent = delivery._id;
+//         order.status = "assigned";
+//         order.assignedAt = new Date();
+
+//         // 5. Mark agent busy
+//         delivery.isAvailable = false;
+
+//         await order.save();
+//         await delivery.save();
+
+//         res.json({
+//             message: "Delivery agent assigned successfully",
+//             order
+//         });
+
+//     } catch (err) {
+//         res.status(500).json({ message: err.message });
+//     }
+// };
+
 export const assignDeliveryAgent = async (req, res) => {
     try {
         const { orderId } = req.params;
         const { deliveryId } = req.body;
 
-        // 1. Validate input
         if (!deliveryId) {
             return res.status(400).json({ message: "Delivery agent ID required" });
         }
 
-        // 2. Get order
         const order = await Order.findById(orderId);
 
         if (!order) {
             return res.status(404).json({ message: "Order not found" });
         }
 
-        // 🚫 Prevent assigning cancelled/delivered orders
         if (["cancelled", "delivered"].includes(order.status)) {
             return res.status(400).json({
                 message: "Cannot assign delivery to this order"
             });
         }
 
-        // 🚫 Prevent re-assignment (optional strict rule)
         if (order.deliveryAgent) {
             return res.status(400).json({
                 message: "Delivery agent already assigned"
             });
         }
 
-        // 3. Get delivery agent
-        const delivery = await Delivery.findById(deliveryId);
+        /* ---------------- FIX STARTS HERE ---------------- */
 
-        if (!delivery || !delivery.isActive) {
-            return res.status(404).json({ message: "Invalid delivery agent" });
-        }
+        const user = await User.findById(deliveryId);
 
-        // 🚫 Check availability
-        if (!delivery.isAvailable) {
-            return res.status(400).json({
-                message: "Delivery agent is not available"
+        if (!user || !user.isActive || !user.role.includes("delivery")) {
+            return res.status(404).json({
+                message: "Invalid delivery user"
             });
         }
 
-        // 4. Assign
-        order.deliveryAgent = delivery._id;
+        // OPTIONAL: if you track availability in User
+        // if (!user.isAvailable) {
+        //     return res.status(400).json({
+        //         message: "Delivery agent not available"
+        //     });
+        // }
+
+        order.deliveryAgent = user._id;
         order.status = "assigned";
         order.assignedAt = new Date();
 
-        // 5. Mark agent busy
-        delivery.isAvailable = false;
-
         await order.save();
-        await delivery.save();
 
         res.json({
             message: "Delivery agent assigned successfully",

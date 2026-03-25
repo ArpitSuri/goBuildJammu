@@ -1,5 +1,6 @@
 import jwt, { decode } from "jsonwebtoken";
 import User from "../model/userModel.js";
+import Delivery from "../model/deliveryModel.js";
 
 /* ---------------- AUTHENTICATION ---------------- */
 export const isAuthenticated = async (req, res, next) => {
@@ -59,9 +60,26 @@ export const isSupplier = (req, res, next) => {
     }
     next();
 };
+
+/* ---------------- ADMIN CHECK ---------------- */
 export const isDelivery = (req, res, next) => {
-    if (!req.user.roles.includes("delivery")) {
-        return res.status(403).json({ message: "Delivery only" });
+    try {
+        console.log("USER IN DELIVERY CHECK:", req.user);
+
+        if (!req.user || !Array.isArray(req.user.role)) {
+            // console.log("❌ role missing or invalid");
+            return res.status(403).json({ message: "Access denied - No role" });
+        }
+
+        if (!req.user.role.includes("delivery")) {
+            // console.log("❌ Not an admin:", req.user.role);
+            return res.status(403).json({ message: "Access denied - Delivery only" });
+        }
+
+        // console.log("✅ Admin verified");
+        next();
+    } catch (err) {
+        console.log("DELIVERY ERROR:", err.message);
+        return res.status(500).json({ message: err.message });
     }
-    next();
 };

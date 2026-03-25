@@ -23,3 +23,22 @@ export const deleteDelivery = (id) =>
     axios.delete(`${API}/${id}`, {
         headers: { Authorization: `Bearer ${getToken()}` }
     });
+
+export const getMyDeliveryOrders = () =>
+    axios.get(`${API}/my-orders`, {
+        headers: { Authorization: `Bearer ${getToken()}` }
+    });
+
+export const getDeliveryOrderById = (orderId) =>
+    axios.get(`${API}/order/${orderId}`, {
+        headers: { Authorization: `Bearer ${getToken()}` }
+    });
+
+export const updateDeliveryStatus = (orderId, status) =>
+    axios.put(
+        `${API}/order/${orderId}/status`,
+        { status },
+        {
+            headers: { Authorization: `Bearer ${getToken()}` }
+        }
+    );

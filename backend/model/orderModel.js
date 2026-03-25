@@ -35,8 +35,7 @@ const orderSchema = new Schema({
     // ✅ NEW: Delivery Assignment
     deliveryAgent: {
         type: Schema.Types.ObjectId,
-        ref: "Delivery",
-        default: null
+        ref: "User"
     },
 
     // ✅ Track assignment lifecycle
