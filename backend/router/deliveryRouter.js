@@ -13,15 +13,15 @@ import { isAuthenticated, isAdmin , isDelivery } from "../middleWare/authMiddlew
 
 const router = express.Router();
 
-router.post("/", isAuthenticated, isAdmin, createDelivery);
+// ✅ SPECIFIC routes FIRST
+router.get("/my-orders", isAuthenticated, isDelivery, getMyDeliveryOrders);
+router.get("/order/:orderId", isAuthenticated, isDelivery, getDeliveryOrderById);
+router.put("/order/:orderId/status", isAuthenticated, isDelivery, updateDeliveryStatus);
+
+// ✅ GENERIC routes AFTER
 router.get("/", isAuthenticated, isAdmin, getAllDelivery);
+router.post("/", isAuthenticated, isAdmin, createDelivery);
 router.put("/:id", isAuthenticated, isAdmin, updateDelivery);
 router.delete("/:id", isAuthenticated, isAdmin, deleteDelivery);
-
-router.get("/my-orders", isAuthenticated, isDelivery, getMyDeliveryOrders);
-
-router.get("/order/:orderId", isAuthenticated, isDelivery, getDeliveryOrderById);
-
-router.put("/order/:orderId/status", isAuthenticated, isDelivery, updateDeliveryStatus);
 
 export default router;

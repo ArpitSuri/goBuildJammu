@@ -43,6 +43,7 @@ export default function AdminOrders() {
     }, []);
 
     const handleAssignDelivery = async (orderId, deliveryId) => {
+      console.log("Assigning delivery", { orderId, deliveryId });
         try {
             setLoadingId(orderId);
             await assignDelivery(orderId, deliveryId);
@@ -130,6 +131,8 @@ export default function AdminOrders() {
                 >
                   <option value="pending">Pending</option>
                   <option value="confirmed">Confirmed</option>
+                  <option value="assigned">Assigned</option>
+                  <option value="picked">Picked</option>
                   <option value="shipped">Shipped</option>
                   <option value="delivered">Delivered</option>
                   <option value="cancelled">Cancelled</option>
@@ -151,9 +154,10 @@ export default function AdminOrders() {
 
                 {/* Delivery */}
                 <select
-                  onChange={(e) =>
-                    handleAssignDelivery(order._id, e.target.value)
-                  }
+                  onChange={(e) => {
+                    console.log("Selected value:", e.target.value);
+                    handleAssignDelivery(order._id, e.target.value);
+                  }}
                   disabled={loadingId === order._id || order.deliveryAgent}
                   className="px-2 py-1 border rounded-lg text-sm focus:ring-2 focus:ring-green-600"
                 >

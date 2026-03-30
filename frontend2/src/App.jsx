@@ -25,6 +25,8 @@ import DeliveryPage from "./pages/DeliveryPage";
 import DeliveryDashboard from "./pages/delivery/DeliveryDashboard";
 import DeliveryLayout from "./pages/delivery/DeliveryLayout";
 import MyProfile from "./pages/MyProfile";
+import Footer from "../components/Footer";
+import SearchPage from "./pages/SearchPage";
 
 
 /**
@@ -35,6 +37,7 @@ const PublicLayout = () => (
   <>
     <Navbar />
     <Outlet />
+    <Footer />
   </>
 );
 
@@ -54,6 +57,7 @@ export default function App() {
           <Route path="/my-orders" element={<MyOrders/>}/>
           <Route path="/my-profile" element={<MyProfile />}/>
           <Route path ="/orders/:id" element={<OrderDetails />}/>
+          <Route path="search" element={<SearchPage />} />
         </Route>
 
         {/* --- ADMIN ROUTES (NO MAIN NAVBAR) --- */}

@@ -136,15 +136,47 @@ export const deleteDelivery = async (req, res) => {
     }
 };
 
+// export const getMyDeliveryOrders = async (req, res) => {
+//     try {
+//         console.log("LOGGED IN USER:", req.user._id.toString());
+//         if (!req.user) {
+//             return res.status(401).json({ message: "Unauthorized" });
+//         }
+
+//         const orders = await Order.find({
+//             deliveryAgent: req.user._id,
+//             status: { $in: ["assigned", "picked", "shipped"] }
+//         })
+//             .populate("user", "name phone")
+//             .sort({ createdAt: -1 });
+
+//         console.log("REQ USER ID:", req.user._id);
+//         console.log("TYPE:", typeof req.user._id);
+
+
+
+//         res.json(orders);
+//     } catch (err) {
+//         res.status(500).json({ message: err.message });
+//     }
+// };
+
 export const getMyDeliveryOrders = async (req, res) => {
     try {
-        console.log("LOGGED IN USER:", req.user._id.toString());
         if (!req.user) {
             return res.status(401).json({ message: "Unauthorized" });
         }
 
+        // 1. Find the delivery profile associated with this user
+        const deliveryProfile = await Delivery.findOne({ user: req.user._id });
+
+        if (!deliveryProfile) {
+            return res.status(404).json({ message: "Delivery profile not found" });
+        }
+
+        // 2. Query orders using the DELIVERY profile ID, not the USER ID
         const orders = await Order.find({
-            deliveryAgent: req.user._id,
+            deliveryAgent: deliveryProfile._id, // Use the delivery profile ID here
             status: { $in: ["assigned", "picked", "shipped"] }
         })
             .populate("user", "name phone")
@@ -164,14 +196,25 @@ export const getDeliveryOrderById = async (req, res) => {
             return res.status(401).json({ message: "Unauthorized" });
         }
 
+        // 1. Fetch the delivery profile linked to this user
+        const deliveryProfile = await Delivery.findOne({ user: req.user._id });
+
+        if (!deliveryProfile) {
+            return res.status(404).json({ message: "Delivery profile not found" });
+        }
+
+        // 2. Query using the Delivery Profile ID (_id from the delivery collection)
         const order = await Order.findOne({
             _id: orderId,
-            deliveryAgent: req.user._id
+            deliveryAgent: deliveryProfile._id
         }).populate("user", "name phone");
+
+        // Debugging logs to confirm the IDs match now
+        console.log("Searching for Delivery Profile ID:", deliveryProfile._id);
 
         if (!order) {
             return res.status(404).json({
-                message: "Order not found or not assigned to you"
+                message: "Order not found or not assigned to your delivery profile"
             });
         }
 
@@ -190,20 +233,28 @@ export const updateDeliveryStatus = async (req, res) => {
             return res.status(401).json({ message: "Unauthorized" });
         }
 
+        // 1. Get the Delivery Profile ID first
+        const deliveryProfile = await Delivery.findOne({ user: req.user._id });
+
+        if (!deliveryProfile) {
+            return res.status(404).json({ message: "Delivery profile not found" });
+        }
+
         const allowedFlow = ["picked", "shipped", "delivered"];
 
         if (!allowedFlow.includes(status)) {
             return res.status(400).json({ message: "Invalid delivery status" });
         }
 
+        // 2. Query using deliveryProfile._id
         const order = await Order.findOne({
             _id: orderId,
-            deliveryAgent: req.user._id
+            deliveryAgent: deliveryProfile._id
         });
 
         if (!order) {
             return res.status(404).json({
-                message: "Order not found or not assigned to you"
+                message: "Order not found or not assigned to your delivery profile"
             });
         }
 
@@ -217,22 +268,33 @@ export const updateDeliveryStatus = async (req, res) => {
 
         if (flowMap[order.status] !== status) {
             return res.status(400).json({
-                message: `Invalid transition from ${order.status} → ${status}`
+                message: `Invalid transition from ${order.status} to ${status}`
             });
         }
 
-        /* ---------------- TIMESTAMPS ---------------- */
+        /* ---------------- TIMESTAMPS & LOGIC ---------------- */
 
-        if (status === "picked") order.pickedAt = new Date();
-        if (status === "delivered") order.deliveredAt = new Date();
+        // Replace your order.save() block with this:
+        const updatedOrder = await Order.findOneAndUpdate(
+            { _id: orderId, deliveryAgent: deliveryProfile._id },
+            {
+                $set: {
+                    status: status,
+                    pickedAt: status === "picked" ? new Date() : order.pickedAt,
+                    deliveredAt: status === "delivered" ? new Date() : order.deliveredAt
+                }
+            },
+            { new: true } // returns the updated document
+        );
 
-        order.status = status;
-
-        await order.save();
+        if (status === "delivered") {
+            await Delivery.findByIdAndUpdate(deliveryProfile._id, { isAvailable: true });
+        }
 
         res.json({
+            success: true,
             message: "Delivery status updated",
-            order
+            order: updatedOrder
         });
 
     } catch (err) {

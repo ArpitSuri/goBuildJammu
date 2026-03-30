@@ -3,12 +3,15 @@ import {
     sendOTP,
     verifyOTP,
     signup,
-    login
+    login,
+    getMyProfile
 } from "../controllers/authController.js";
+import { isAuthenticated } from "../middleWare/authMiddleware.js";
 
 const router = express.Router();
 
 // Core
+router.get("/me", isAuthenticated, getMyProfile);
 router.post("/send-otp", sendOTP);
 router.post("/verify-otp", verifyOTP);
 

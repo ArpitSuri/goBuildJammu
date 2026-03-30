@@ -46,7 +46,12 @@ export default function DeliveryOrderModal({ orderId, onClose }) {
 
         {/* ITEMS */}
         <div className="mb-4">
+
           <p className="text-sm text-gray-500 mb-2">Items</p>
+          <p className="text-sm text-gray-500">Order Status</p>
+          <p className="text-gray-800 font-medium">
+            {order.status.toUpperCase()}
+          </p>
 
           <div className="divide-y border rounded-lg">
             {order.items.map((item, i) => (
@@ -74,7 +79,7 @@ export default function DeliveryOrderModal({ orderId, onClose }) {
         <div className="mb-4">
           <p className="text-sm text-gray-500">Delivery Address</p>
           <p className="text-sm text-gray-700">
-            {order.address?.fullAddress}
+            {order.address}
           </p>
           <p className="text-sm text-gray-600">
             {order.address?.city}, {order.address?.state}

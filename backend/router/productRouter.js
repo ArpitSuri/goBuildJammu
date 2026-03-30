@@ -3,7 +3,8 @@ import {
     createProduct,
     getProducts,
     deleteProduct,
-    updateProduct
+    updateProduct,
+    getSearchedProduct
 } from "../controllers/productController.js";
 
 import {
@@ -15,6 +16,7 @@ const router = express.Router();
 
 /* -------- PUBLIC -------- */
 router.get("/", getProducts);
+router.get("/search", getSearchedProduct);
 
 /* -------- ADMIN -------- */
 router.post("/", isAuthenticated, isAdmin, createProduct);

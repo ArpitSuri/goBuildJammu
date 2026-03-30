@@ -21,22 +21,21 @@ export default function CategoryPage() {
     }, [id]);
 
     return (
-        <div className="max-w-7xl mx-auto p-6">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 py-6">
 
-            <h1 className="text-xl font-semibold mb-4">
+            <h1 className="text-lg sm:text-xl md:text-2xl font-semibold mb-4">
                 Products
             </h1>
 
             {products.length === 0 ? (
-                <p>No products found</p>
+                <p className="text-sm sm:text-base">No products found</p>
             ) : (
-                    <div className="grid grid-cols-4 gap-4">
-                        {products.map(p => (
-                            <ProductCard key={p._id} product={p} />
-                        ))}
-                    </div>
+                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+                    {products.map(p => (
+                        <ProductCard key={p._id} product={p} />
+                    ))}
+                </div>
             )}
-
         </div>
     );
 }

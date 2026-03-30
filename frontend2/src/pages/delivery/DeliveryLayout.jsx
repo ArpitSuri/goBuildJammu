@@ -74,7 +74,7 @@ const DeliveryLayout = () => {
         {/* LOGO */}
         <div className="flex items-center px-6 h-16 border-b">
           <span className="text-xl font-semibold text-gray-800">
-            Shree<span className="text-green-700">jal</span>
+            DigitalInfratech
           </span>
         </div>
 

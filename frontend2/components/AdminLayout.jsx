@@ -86,7 +86,7 @@ const AdminLayout = () => {
                 <div className="flex items-center px-8 h-24 border-b border-slate-800/50">
                     <Link to="/" className="flex items-center gap-3">
                         <span className="text-2xl font-semibold text-gray-800">
-  Shree<span className="text-green-700">jal</span>
+                            DigitalInfratech<span className="text-green-700"></span>
 </span>
                     </Link>
                 </div>

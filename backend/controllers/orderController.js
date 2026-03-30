@@ -2,6 +2,7 @@ import Order from "../model/orderModel.js";
 import Cart from "../model/cartModel.js";
 import Variant from "../model/varientModel.js";
 import Delivery from "../model/deliveryModel.js";
+import User from "../model/userModel.js";
 
 /* ---------------- CREATE ORDER ---------------- */
 // export const createOrder = async (req, res) => {
@@ -300,6 +301,7 @@ export const getOrderById = async (req, res) => {
 export const updateOrderStatus = async (req, res) => {
     try {
         const { orderId } = req.params;
+        console.log(`Updating order ${orderId} with data:`, req.body);
         const { status, paymentStatus } = req.body;
 
         const order = await Order.findById(orderId);
@@ -309,7 +311,7 @@ export const updateOrderStatus = async (req, res) => {
         }
 
         /* ---------------- VALID STATUS ---------------- */
-        const validStatus = ["pending", "confirmed", "shipped", "delivered", "cancelled"];
+        const validStatus = ["pending", "confirmed", "assigned", "picked", "shipped", "delivered", "cancelled"];
         const validPayment = ["pending", "paid", "failed"];
 
         if (status && !validStatus.includes(status)) {
@@ -323,40 +325,47 @@ export const updateOrderStatus = async (req, res) => {
         /* ---------------- STOCK LOGIC ---------------- */
 
         // ✅ CASE 1: CONFIRM ORDER (deduct real stock)
-        if (status === "confirmed" && order.status !== "confirmed") {
-            for (const item of order.items) {
-                const variant = await Variant.findById(item.variant);
+        // if (status === "confirmed" && order.status !== "confirmed") {
+        //     for (const item of order.items) {
+        //         const variant = await Variant.findById(item.variant);
 
-                variant.stock -= item.quantity;
-                variant.reservedStock -= item.quantity;
+        //         variant.stock -= item.quantity;
+        //         variant.reservedStock -= item.quantity;
 
-                await variant.save();
-            }
-        }
+        //         await variant.save();
+        //     }
+        // }
 
         // ❌ CASE 2: CANCEL / FAIL (release reserved stock)
-        if (
-            (status === "cancelled" || paymentStatus === "failed") &&
-            order.paymentStatus !== "failed"
-        ) {
-            for (const item of order.items) {
-                const variant = await Variant.findById(item.variant);
+        // if (
+        //     (status === "cancelled" || paymentStatus === "failed") &&
+        //     order.paymentStatus !== "failed"
+        // ) {
+        //     for (const item of order.items) {
+        //         const variant = await Variant.findById(item.variant);
 
-                variant.reservedStock -= item.quantity;
+        //         variant.reservedStock -= item.quantity;
 
-                await variant.save();
-            }
-        }
+        //         await variant.save();
+        //     }
+        // }
 
         /* ---------------- UPDATE ORDER ---------------- */
-        if (status) order.status = status;
-        if (paymentStatus) order.paymentStatus = paymentStatus;
+        /* ---------------- UPDATE ORDER ---------------- */
+        const updateData = {};
+        if (status) updateData.status = status;
+        if (paymentStatus) updateData.paymentStatus = paymentStatus;
 
-        await order.save();
+        // This replaces: order.status = status; await order.save();
+        const updatedOrder = await Order.findByIdAndUpdate(
+            orderId,
+            { $set: updateData },
+            { new: true, runValidators: false }
+        );
 
         res.json({
             message: "Order updated successfully",
-            order
+            order: updatedOrder
         });
 
     } catch (err) {
@@ -367,7 +376,9 @@ export const updateOrderStatus = async (req, res) => {
 export const updatePaymentStatus = async (req, res) => {
     try {
         const { orderId } = req.params;
+        console.log(`Updating payment for order ${orderId} with data:`, req.body);
         const { paymentStatus } = req.body;
+
 
         const validPayment = ["pending", "paid", "failed"];
 
@@ -420,10 +431,16 @@ export const updatePaymentStatus = async (req, res) => {
         }
 
         /* ---------------- UPDATE PAYMENT ---------------- */
-        order.paymentStatus = paymentStatus;
+        const updatedOrder = await Order.findByIdAndUpdate(
+            orderId,
+            { $set: { paymentStatus, status: order.status } },
+            { new: true, runValidators: false }
+        );
 
-        await order.save();
-
+        res.json({
+            message: "Payment status updated",
+            order: updatedOrder
+        });
         res.json({
             message: "Payment status updated",
             order
@@ -472,76 +489,12 @@ export const getOrderDetailsAdmin = async (req, res) => {
 
 
 // /* ---------------- ASSIGN DELIVERY AGENT (ADMIN) ---------------- */
-// export const assignDeliveryAgent = async (req, res) => {
-//     try {
-//         const { orderId } = req.params;
-//         const { deliveryId } = req.body;
-
-//         // 1. Validate input
-//         if (!deliveryId) {
-//             return res.status(400).json({ message: "Delivery agent ID required" });
-//         }
-
-//         // 2. Get order
-//         const order = await Order.findById(orderId);
-
-//         if (!order) {
-//             return res.status(404).json({ message: "Order not found" });
-//         }
-
-//         // 🚫 Prevent assigning cancelled/delivered orders
-//         if (["cancelled", "delivered"].includes(order.status)) {
-//             return res.status(400).json({
-//                 message: "Cannot assign delivery to this order"
-//             });
-//         }
-
-//         // 🚫 Prevent re-assignment (optional strict rule)
-//         if (order.deliveryAgent) {
-//             return res.status(400).json({
-//                 message: "Delivery agent already assigned"
-//             });
-//         }
-
-//         // 3. Get delivery agent
-//         const delivery = await Delivery.findById(deliveryId);
-
-//         if (!delivery || !delivery.isActive) {
-//             return res.status(404).json({ message: "Invalid delivery agent" });
-//         }
-
-//         // 🚫 Check availability
-//         if (!delivery.isAvailable) {
-//             return res.status(400).json({
-//                 message: "Delivery agent is not available"
-//             });
-//         }
-
-//         // 4. Assign
-//         order.deliveryAgent = delivery._id;
-//         order.status = "assigned";
-//         order.assignedAt = new Date();
-
-//         // 5. Mark agent busy
-//         delivery.isAvailable = false;
-
-//         await order.save();
-//         await delivery.save();
-
-//         res.json({
-//             message: "Delivery agent assigned successfully",
-//             order
-//         });
-
-//     } catch (err) {
-//         res.status(500).json({ message: err.message });
-//     }
-// };
-
 export const assignDeliveryAgent = async (req, res) => {
     try {
         const { orderId } = req.params;
         const { deliveryId } = req.body;
+
+        console.log("Assigning:", { orderId, deliveryId });
 
         if (!deliveryId) {
             return res.status(400).json({ message: "Delivery agent ID required" });
@@ -565,35 +518,57 @@ export const assignDeliveryAgent = async (req, res) => {
             });
         }
 
-        /* ---------------- FIX STARTS HERE ---------------- */
+        /* ---------------- FIX: DELIVERY → USER ---------------- */
 
-        const user = await User.findById(deliveryId);
+        const delivery = await Delivery.findById(deliveryId).populate("user");
+
+        if (!delivery) {
+            return res.status(404).json({
+                message: "Delivery not found"
+            });
+        }
+
+        if (!delivery.isActive || !delivery.isAvailable) {
+            return res.status(400).json({
+                message: "Delivery agent not available"
+            });
+        }
+
+        const user = delivery.user;
+
+        console.log("Populated User Data:", user);
 
         if (!user || !user.isActive || !user.role.includes("delivery")) {
-            return res.status(404).json({
+            return res.status(400).json({
                 message: "Invalid delivery user"
             });
         }
 
-        // OPTIONAL: if you track availability in User
-        // if (!user.isAvailable) {
-        //     return res.status(400).json({
-        //         message: "Delivery agent not available"
-        //     });
-        // }
+        /* ---------------- ASSIGN ---------------- */
 
         order.deliveryAgent = user._id;
         order.status = "assigned";
         order.assignedAt = new Date();
 
-        await order.save();
+        const updatedOrder = await Order.findByIdAndUpdate(
+            orderId,
+            {
+                $set: {
+                    deliveryAgent: user._id,
+                    status: "assigned",
+                    assignedAt: new Date()
+                }
+            },
+            { new: true, runValidators: false } // runValidators: false is the magic fix
+        );
 
         res.json({
             message: "Delivery agent assigned successfully",
-            order
+            order: updatedOrder
         });
 
     } catch (err) {
+        console.error("ASSIGN DELIVERY ERROR:", err);
         res.status(500).json({ message: err.message });
     }
 };

@@ -506,3 +506,42 @@ export const deleteProduct = async (req, res) => {
         res.status(500).json({ message: err.message });
     }
 };
+export const getSearchedProduct =async (req, res) => {
+    try {
+        const { q } = req.query; 
+        if (!q) return res.json([]);
+
+        const products = await Product.find({
+            $or: [
+                { name: { $regex: q, $options: "i" } },
+                { description: { $regex: q, $options: "i" } }
+            ]
+        }).limit(10).populate("category");
+
+        res.json(products);
+    } catch (error) {
+        res.status(500).json({ message: "Search failed", error });
+    }
+}; async (req, res) => {
+    try {
+        const { q } = req.query;
+
+        if (!q) return res.status(200).json([]);
+
+        // This performs a fuzzy search
+        const products = await Product.find({
+            $or: [
+                { name: { $regex: q, $options: 'i' } },
+                { description: { $regex: q, $options: 'i' } },
+                { brand: { $regex: q, $options: 'i' } } // Assuming you have a brand field
+            ]
+        })
+            .select('name images variants') // Only select needed fields for speed
+            .limit(20);
+
+        res.status(200).json(products);
+    } catch (error) {
+        res.status(500).json({ message: "Server error" });
+    }
+};
+

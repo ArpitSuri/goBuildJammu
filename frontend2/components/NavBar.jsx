@@ -797,7 +797,7 @@ export default function Navbar() {
                         {/* Center: Logo (absolute centered) */}
                         <Link to="/" className="gb-logo">
                             <div className="gb-logo-icon">⚡</div>
-                            GoBuild
+                            DigitalInfratech
                         </Link>
 
                         {/* Right: Icons */}

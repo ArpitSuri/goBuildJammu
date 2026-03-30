@@ -1,5 +1,6 @@
 import User from "../model/userModel.js";
 import jwt from "jsonwebtoken";
+import Delivery from "../model/deliveryModel.js";
 
 /* ---------------- TEMP OTP STORE (Replace with Redis in production) ---------------- */
 const otpStore = new Map();
@@ -132,5 +133,37 @@ export const login = async (req, res) => {
 
     } catch (err) {
         res.status(500).json({ message: err.message });
+    }
+};
+
+
+
+export const getMyProfile = async (req, res) => {
+    try {
+        const userId = req.user._id;
+
+        // Always fetch base user
+        const user = await User.findById(userId).select("-password");
+
+        if (!user) {
+            return res.status(404).json({ message: "User not found" });
+        }
+
+        let deliveryProfile = null;
+
+        // If user is delivery → attach delivery data
+        if (user.role.includes("delivery")) {
+            deliveryProfile = await Delivery.findOne({ user: userId });
+        }
+
+        return res.status(200).json({
+            success: true,
+            user,
+            delivery: deliveryProfile // null if not delivery
+        });
+
+    } catch (error) {
+        console.error("Get Profile Error:", error);
+        res.status(500).json({ message: "Server error" });
     }
 };
