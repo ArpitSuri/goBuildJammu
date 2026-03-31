@@ -45,8 +45,9 @@ export default function OTPModal({ isOpen, onClose, data }) {
       const { token, user } = res.data;
 
       localStorage.setItem("token", token);
+      console.log("User Roles:", user.role); // Debugging line
 
-      const roles = user.roles || [];
+      const roles = user.role || [];
 
       if (roles.includes("admin")) {
         navigate("/admin");
