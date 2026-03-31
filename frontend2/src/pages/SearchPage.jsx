@@ -243,7 +243,7 @@ const SearchPage = () => {
     const fetchResults = async () => {
         setLoading(true);
         try {
-            const res = await axios.get(`http://localhost:5000/api/products/search?q=${query}`);
+            const res = await axios.get(`${import.meta.env.VITE_API_URL}/api/products/search?q=${query}`);
             // Check if res.data is an array to prevent .map crash
             if (Array.isArray(res.data)) {
                 setResults(res.data);

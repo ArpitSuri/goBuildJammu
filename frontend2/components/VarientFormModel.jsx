@@ -31,7 +31,7 @@ const VariantFormModal = ({ productId, variant, onClose, refresh }) => {
     }, []);
 
     const fetchAttributes = async () => {
-        const { data } = await axios.get("http://localhost:5000/api/attributes");
+        const { data } = await axios.get(`${import.meta.env.VITE_API_URL}/api/attributes`);
         setAllAttributes(data.attributes);
     };
 
