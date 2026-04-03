@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { createOrder } from "../services/orderService";
 import { getCart } from "../services/cartService";
 
-const SERVICEABLE_PINS = ["282001", "110001", "144001"];
+const SERVICEABLE_PINS = ["226001", "226002", "226003", "226004", "226005", "226010", "226012", "226017", "226018", "226023", "227308"];
 
 export default function Checkout() {
     const [step, setStep] = useState(1); // 1: Pincode, 2: Address, 3: Payment, 4: Review

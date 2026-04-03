@@ -56,7 +56,7 @@ export default function Login() {
       {/* Button */}
       <button
         onClick={handleSubmit}
-        className="w-full bg-yellow-400 hover:bg-yellow-500 text-black font-semibold py-2 rounded-lg transition"
+        className="w-full bg-yellow-400 hover:bg-yellow-500 cursor-pointer text-black font-semibold py-2 rounded-lg transition"
       >
         Request OTP
       </button>

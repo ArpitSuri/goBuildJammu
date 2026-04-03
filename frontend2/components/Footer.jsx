@@ -10,7 +10,7 @@ const Footer = () => {
               <div className="flex flex-col space-y-6">
 
                   {/* App Buttons */}
-                  <div className="flex flex-wrap gap-3">
+                  {/* <div className="flex flex-wrap gap-3">
                       <img
                           src="https://upload.wikimedia.org/wikipedia/commons/7/78/Google_Play_Store_badge_EN.svg"
                           alt="Google Play"
@@ -21,12 +21,12 @@ const Footer = () => {
                           alt="App Store"
                           className="h-10 w-auto max-w-[140px]"
                       />
-                  </div>
+                  </div> */}
 
                   {/* Brand */}
                   <div>
                       <h2 className="text-xl font-bold border-b border-black inline-block pb-1 mb-3">
-                          DigitalInfratech - Building materials in 60 mins
+                          DigitalInfratech - Building materials at door step
                       </h2>
                       <p className="text-sm leading-relaxed max-w-xs">
                           DigitalInfratech™ is owned and operated by DigitalInfratech Retail Private Limited.
@@ -86,12 +86,12 @@ const Footer = () => {
                   <div className="text-sm leading-relaxed">
                       <p className="mb-2">
                           <span className="font-medium">Email:</span>{" "}
-                          <span className="opacity-80">hello@digitalinfratech.co</span>
+                          <span className="opacity-80">infor@digitalinfratech.in</span>
                       </p>
                       <p>
                           <span className="font-medium">Address:</span>{" "}
                           <span className="opacity-80">
-                             Jammu 
+                             Room no 104. OM Plazza ,Munshi pulia
                           </span>
                       </p>
                   </div>
@@ -124,7 +124,7 @@ const Footer = () => {
 
           {/* Bottom Bar */}
           <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center text-xs gap-4 opacity-70 text-center md:text-left">
-              <p>© 2026, BuildPro</p>
+              <p>© 2026, DigitalInfraTech</p>
 
               <div className="flex flex-wrap justify-center gap-4">
                   <a href="#" className="hover:underline">Refund</a>

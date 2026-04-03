@@ -134,17 +134,75 @@ const getAirtelAuth = () => {
     return `Basic ${Buffer.from(credentials).toString('base64')}`;
 };
 
+// /* ---------------- SEND OTP ---------------- */
+// export const sendOTP = async (req, res) => {
+//     try {
+//         const { phone } = req.body;
+//         if (!phone) return res.status(400).json({ message: "Phone number required" });
+
+//         // Clean phone number (last 10 digits)
+//         const cleanPhone = phone.replace(/\D/g, "").slice(-10);
+//         const otp = Math.floor(100000 + Math.random() * 900000).toString();
+
+//         // Airtel Payload - EXACTLY matching your DLT template
+//         const smsPayload = {
+//             customerId: process.env.AIRTEL_CUSTOMER_ID,
+//             destinationAddress: [`91${cleanPhone}`],
+//             dltTemplateId: process.env.AIRTEL_TEMPLATE_ID,
+//             entityId: process.env.AIRTEL_ENTITY_ID,
+//             messageType: "SERVICE_IMPLICIT",
+//             sourceAddress: process.env.AIRTEL_SOURCE_ADDR,
+//             message: `Your OTP is ${otp} to login into DigitalInfraTech Platform Services Pvt Ltd. This OTP is valid for 10 minutes. -DigitalInfraTech`
+//         };
+
+//         // Send to Airtel
+//         await axios.post('https://iqsms.airtel.in/api/v1/send-prepaid-sms', smsPayload, {
+//             headers: {
+//                 'Content-Type': 'application/json',
+//                 'Authorization': getAirtelAuth()
+//             }
+//         });
+
+//         // Store OTP in memory (Valid for 10 mins)
+//         otpStore.set(cleanPhone, {
+//             otp,
+//             expiry: Date.now() + 10 * 60 * 1000
+//         });
+
+//         res.status(200).json({ success: true, message: "OTP sent successfully" });
+
+//     } catch (err) {
+//         console.error("Airtel Error:", err.response?.data || err.message);
+//         res.status(500).json({ message: "Failed to send SMS" });
+//     }
+// };
+
 /* ---------------- SEND OTP ---------------- */
 export const sendOTP = async (req, res) => {
     try {
+        console.log("---- SEND OTP START ----");
+
         const { phone } = req.body;
-        if (!phone) return res.status(400).json({ message: "Phone number required" });
+        console.log("Incoming phone:", phone);
 
-        // Clean phone number (last 10 digits)
+        if (!phone) {
+            console.warn("Phone number missing in request");
+            return res.status(400).json({ message: "Phone number required" });
+        }
+
+        // Clean phone number
         const cleanPhone = phone.replace(/\D/g, "").slice(-10);
-        const otp = Math.floor(100000 + Math.random() * 900000).toString();
+        console.log("Cleaned phone:", cleanPhone);
 
-        // Airtel Payload - EXACTLY matching your DLT template
+        if (cleanPhone.length !== 10) {
+            console.warn("Invalid phone after cleaning:", cleanPhone);
+            return res.status(400).json({ message: "Invalid phone number" });
+        }
+
+        const otp = Math.floor(100000 + Math.random() * 900000).toString();
+        console.log("Generated OTP:", otp);
+
+        // Build payload
         const smsPayload = {
             customerId: process.env.AIRTEL_CUSTOMER_ID,
             destinationAddress: [`91${cleanPhone}`],
@@ -152,31 +210,68 @@ export const sendOTP = async (req, res) => {
             entityId: process.env.AIRTEL_ENTITY_ID,
             messageType: "SERVICE_IMPLICIT",
             sourceAddress: process.env.AIRTEL_SOURCE_ADDR,
-            message: `Your OTP is ${otp} to login into GoBuild Platform Services Pvt Ltd. This OTP is valid for 10 minutes. - GoBuild`
+            message: `Your OTP is ${otp} to login into DigitalInfraTech Platform Services Pvt Ltd. This OTP is valid for 10 minutes. -DigitalInfraTech`
         };
 
-        // Send to Airtel
-        await axios.post('https://iqsms.airtel.in/api/v1/send-prepaid-sms', smsPayload, {
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': getAirtelAuth()
-            }
-        });
+        console.log("Airtel Payload:", JSON.stringify(smsPayload, null, 2));
 
-        // Store OTP in memory (Valid for 10 mins)
+        // Check env variables
+        // console.log("Env Check:", {
+        //     customerId: !!process.env.AIRTEL_CUSTOMER_ID,
+        //     templateId: !!process.env.AIRTEL_TEMPLATE_ID,
+        //     entityId: !!process.env.AIRTEL_ENTITY_ID,
+        //     sourceAddr: !!process.env.AIRTEL_SOURCE_ADDR
+        // });
+
+        const authHeader = getAirtelAuth();
+        console.log("Auth Header Generated:", authHeader ? "YES" : "NO");
+
+        // Send request
+        console.log("Sending request to Airtel...");
+        const response = await axios.post(
+            'https://iqsms.airtel.in/api/v1/send-prepaid-sms',
+            smsPayload,
+            {
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': authHeader
+                }
+            }
+        );
+
+        console.log("Airtel Response Status:", response.status);
+        console.log("Airtel Response Data:", response.data);
+
+        // Store OTP
         otpStore.set(cleanPhone, {
             otp,
             expiry: Date.now() + 10 * 60 * 1000
         });
 
+        console.log("OTP stored successfully:", otpStore.get(cleanPhone));
+
+        console.log("---- SEND OTP SUCCESS ----");
+
         res.status(200).json({ success: true, message: "OTP sent successfully" });
 
     } catch (err) {
-        console.error("Airtel Error:", err.response?.data || err.message);
+        console.error("---- SEND OTP ERROR ----");
+
+        if (err.response) {
+            console.error("Airtel Error Status:", err.response.status);
+            console.error("Airtel Error Data:", err.response.data);
+        } else if (err.request) {
+            console.error("No response received:", err.request);
+        } else {
+            console.error("Error Message:", err.message);
+        }
+
+        console.error("Full Error:", err);
+
         res.status(500).json({ message: "Failed to send SMS" });
     }
+    
 };
-
 /* ---------------- VERIFY OTP ---------------- */
 export const verifyOTP = async (req, res) => {
     try {

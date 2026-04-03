@@ -104,8 +104,7 @@
 //                 ▼
 //             </button>
 
-//             <Link to="/" className="font-bold text-lg">
-//                 GoBuild
+//        
 //             </Link>
 
 //             <div className="flex items-center gap-4">
@@ -994,7 +993,7 @@ export default function Navbar() {
     const [parentCats, setParentCats] = useState([]);
     const [childMap, setChildMap] = useState({});
     const [cartCount, setCartCount] = useState(0);
-    const [pincode, setPincode] = useState(localStorage.getItem("pincode") || "180001");
+    const [pincode, setPincode] = useState("226001");
     const [showModal, setShowModal] = useState(false);
     const [inputPin, setInputPin] = useState("");
     const [pinError, setPinError] = useState("");
@@ -1004,7 +1003,7 @@ export default function Navbar() {
     const userMenuRef = useRef(null);
     const navigate = useNavigate();
 
-    const SERVICEABLE_PINS = ["180001", "180002", "180003", "180004", "180005", "180006", "180007", "180011", "180012", "180013", "180015", "180016", "180017", "180019", "180020", "282001", "110001", "144001"];
+    const SERVICEABLE_PINS = ["226001" , "226002", "226003", "226004", "226005","226010", "226012", "226017", "226018", "226023", "227308"];
 
     useEffect(() => {
         fetchCategories();
@@ -1088,10 +1087,10 @@ export default function Navbar() {
                             className="flex items-center gap-2 cursor-pointer bg-transparent border-none p-0 focus:outline-none"
                             onClick={() => setShowModal(true)}
                         >
-                            <div className="bg-green-500 text-white text-[11px] font-bold rounded-md px-1.5 py-1 leading-tight text-center min-w-[36px]">
+                            {/* <div className="bg-green-500 text-white text-[11px] font-bold rounded-md px-1.5 py-1 leading-tight text-center min-w-[36px]">
                                 <span className="block text-base font-extrabold">60</span>
                                 Mins
-                            </div>
+                            </div> */}
                             <div className="text-left hidden sm:block">
                                 <small className="block text-[10px] text-gray-500 font-medium">Deliver To</small>
                                 <strong className="flex items-center gap-1 text-[13px] text-gray-900 font-semibold">
@@ -1117,14 +1116,14 @@ export default function Navbar() {
                                 {mobileOpen ? <X size={24} /> : <Menu size={24} />}
                             </button>
 
-                            <button className="text-gray-800 hover:text-yellow-500 transition-colors p-1" onClick={() => navigate("/search")} title="Search">
+                            <button className="text-gray-800 hover:text-yellow-500 cursor-pointer transition-colors p-1" onClick={() => navigate("/search")} title="Search">
                                 <Search size={22} />
                             </button>
 
                             {/* User dropdown */}
                             <div ref={userMenuRef} className="relative hidden md:block">
                                 <button
-                                    className="text-gray-800 hover:text-yellow-500 transition-colors p-1 focus:outline-none flex items-center"
+                                    className="text-gray-800 hover:text-yellow-500 cursor-pointer transition-colors p-1 focus:outline-none flex items-center"
                                     onClick={() => setShowUserMenu(p => !p)}
                                     title="Account"
                                 >
@@ -1134,15 +1133,15 @@ export default function Navbar() {
                                     <div className="absolute top-[calc(100%+10px)] right-0 min-w-[170px] bg-white border border-gray-200 rounded-xl shadow-lg overflow-hidden z-[9999] animate-in fade-in zoom-in-95 duration-150">
                                         {!token ? (
                                             <>
-                                                <button className="block w-full text-left px-4 py-3 text-[13.5px] font-medium text-gray-800 hover:bg-gray-50 transition-colors" onClick={() => { navigate("/login"); setShowUserMenu(false); }}>Login</button>
-                                                <button className="block w-full text-left px-4 py-3 text-[13.5px] font-medium text-gray-800 hover:bg-gray-50 transition-colors" onClick={() => { navigate("/signup"); setShowUserMenu(false); }}>Sign Up</button>
+                                                <button className="block w-full text-left px-4 py-3 text-[13.5px] cursor-pointer font-medium text-gray-800 hover:bg-gray-50 transition-colors" onClick={() => { navigate("/login"); setShowUserMenu(false); }}>Login</button>
+                                                <button className="block w-full text-left px-4 py-3 text-[13.5px] cursor-pointer font-medium text-gray-800 hover:bg-gray-50 transition-colors" onClick={() => { navigate("/signup"); setShowUserMenu(false); }}>Sign Up</button>
                                             </>
                                         ) : (
                                             <>
-                                                <button className="block w-full text-left px-4 py-3 text-[13.5px] font-medium text-gray-800 hover:bg-gray-50 transition-colors" onClick={() => { navigate("/my-profile"); setShowUserMenu(false); }}>My Profile</button>
-                                                <button className="block w-full text-left px-4 py-3 text-[13.5px] font-medium text-gray-800 hover:bg-gray-50 transition-colors" onClick={() => { navigate("/my-orders"); setShowUserMenu(false); }}>My Orders</button>
+                                                <button className="block w-full text-left px-4 py-3 text-[13.5px] cursor-pointer font-medium text-gray-800 hover:bg-gray-50 transition-colors" onClick={() => { navigate("/my-profile"); setShowUserMenu(false); }}>My Profile</button>
+                                                <button className="block w-full text-left px-4 py-3 text-[13.5px] cursor-pointer font-medium text-gray-800 hover:bg-gray-50 transition-colors" onClick={() => { navigate("/my-orders"); setShowUserMenu(false); }}>My Orders</button>
                                                 <hr className="border-t border-gray-100 my-1" />
-                                                <button className="block w-full text-left px-4 py-3 text-[13.5px] font-medium text-red-500 hover:bg-red-50 transition-colors" onClick={handleLogout}>Logout</button>
+                                                <button className="block w-full text-left px-4 py-3 text-[13.5px] cursor-pointer font-medium text-red-500 hover:bg-red-50 transition-colors" onClick={handleLogout}>Logout</button>
                                             </>
                                         )}
                                     </div>
@@ -1150,7 +1149,7 @@ export default function Navbar() {
                             </div>
 
                             {/* Cart */}
-                            <button className="text-gray-800 hover:text-yellow-500 transition-colors p-1 relative flex items-center" onClick={() => navigate("/cart")} title="Cart">
+                            <button className="text-gray-800 hover:text-yellow-500 transition-colors cursor-pointer p-1 relative flex items-center" onClick={() => navigate("/cart")} title="Cart">
                                 <ShoppingCart size={22} />
                                 {cartCount > 0 && (
                                     <span className="absolute -top-1.5 -right-2 bg-yellow-400 text-gray-900 text-[10px] font-bold w-[18px] h-[18px] rounded-full flex items-center justify-center">
@@ -1270,7 +1269,7 @@ export default function Navbar() {
                             value={inputPin}
                             onChange={e => setInputPin(e.target.value)}
                             onKeyDown={e => e.key === "Enter" && handlePinSubmit()}
-                            placeholder="e.g. 180001"
+                            placeholder="e.g. 226001"
                             maxLength={6}
                             autoFocus
                             className="w-full px-4 py-3 border border-gray-200 rounded-xl text-sm transition-all focus:border-yellow-400 focus:ring-2 focus:ring-yellow-400/20 focus:outline-none placeholder:text-gray-400"
