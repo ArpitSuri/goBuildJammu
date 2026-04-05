@@ -49,20 +49,30 @@ import ProductCard from "./ProductCard";
 export default function CategoryPage() {
     const { id } = useParams(); // 'id' usually represents the category name or slug
     const [products, setProducts] = useState([]);
+    // Fallback title agar products load nahi hue
+    const [displayTitle, setDisplayTitle] = useState("Loading...");
 
     // Format the category name for the UI (e.g., "building-materials" -> "Building Materials")
     const categoryTitle = id ? id.replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase()) : "Products";
     const siteUrl = `https://www.digitalinfratech.in/category/${id}`;
+    
 
     const fetchProducts = async () => {
         try {
             const { data } = await getProducts({ category: id });
             setProducts(data.products);
+
+            // Yahan se asli category name uthao
+            if (data.products.length > 0) {
+                setDisplayTitle(data.products[0].category.name);
+            } else {
+                // Agar products nahi mile toh URL slug ko format karlo
+                setDisplayTitle(id.replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase()));
+            }
         } catch (err) {
             console.error(err);
         }
     };
-
     useEffect(() => {
         if (id) fetchProducts();
     }, [id]);
@@ -71,7 +81,7 @@ export default function CategoryPage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 py-6">
             <Helmet>
                 {/* Dynamic Title and Description for Lucknow Market */}
-                <title>{`${categoryTitle} in Lucknow | Digital Infratech`}</title>
+                <title>{`${displayTitle} in Lucknow | Digital Infratech`}</title>
                 <meta name="description" content={`Buy high-quality ${categoryTitle} online at Digital Infratech. We provide wholesale prices and doorstep delivery for all ${categoryTitle} across Lucknow.`} />
                 <link rel="canonical" href={siteUrl} />
 
@@ -103,7 +113,7 @@ export default function CategoryPage() {
             </Helmet>
 
             <h1 className="text-lg sm:text-xl md:text-2xl font-semibold mb-4 capitalize">
-                {categoryTitle}
+                {displayTitle}
             </h1>
 
             {products.length === 0 ? (
