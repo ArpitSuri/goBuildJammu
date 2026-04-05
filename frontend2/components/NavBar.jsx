@@ -954,7 +954,7 @@ import { Search, User, ShoppingCart, ChevronDown, MapPin, Menu, X, Zap } from "l
 //  Announcement Bar (marquee style)
 // ─────────────────────────────────────────────
 const ANNOUNCEMENTS = [
-    "🚀 Superfast delivery in Jammu!",
+    "🚀 Superfast delivery in LUCKNOW!",
     "🏗️ 100% Genuine Construction Materials",
     "🆓 Free delivery on orders above ₹5,000",
     "📞 Open 8am to 8pm · All Days",

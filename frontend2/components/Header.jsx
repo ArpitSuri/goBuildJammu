@@ -36,7 +36,7 @@ const SLIDES = [
     {
         id: 1,
         bg: "linear-gradient(135deg, #fdf6e3 0%, #f5e6c0 100%)",
-        badge: "🏗️ JAMMU'S FASTEST DELIVERY",
+        badge: "🏗️ LUCKNOW'S FASTEST DELIVERY",
         title: "Build Better with\nQuality Materials",
         subtitle: "Order more, Pay Less. Automatically.",
         cta: "Shop Now",
