@@ -27,6 +27,7 @@ import DeliveryLayout from "./pages/delivery/DeliveryLayout";
 import MyProfile from "./pages/MyProfile";
 import Footer from "../components/Footer";
 import SearchPage from "./pages/SearchPage";
+import { HelmetProvider } from "react-helmet-async";
 
 
 /**
@@ -43,6 +44,7 @@ const PublicLayout = () => (
 
 export default function App() {
   return (
+    <HelmetProvider>
     <BrowserRouter>
       <Routes>
         {/* --- PUBLIC ROUTES (WITH NAVBAR) --- */}
@@ -94,5 +96,6 @@ export default function App() {
         <Route path="*" element={<div>404 Not Found</div>} />
       </Routes>
     </BrowserRouter>
+    </HelmetProvider>
   );
 }

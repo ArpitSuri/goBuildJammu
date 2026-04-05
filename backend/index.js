@@ -14,6 +14,7 @@ import cartRoutes from "./router/cartRouter.js";
 import orderRoutes from "./router/orderRouter.js";
 import deliveryRoutes from "./router/deliveryRouter.js"
 import supplierRoutes from "./router/supplierRouter.js"
+import { getSitemap } from "./utils/sitemapConnection.js";
 
 dotenv.config();
 
@@ -35,6 +36,7 @@ app.use("/api/cart", cartRoutes);
 app.use("/api/orders", orderRoutes);
 app.use("/api/delivery",deliveryRoutes);
 app.use("/api/suppliers",supplierRoutes )
+app.get("/sitemap.xml", getSitemap);
 
 
 /* ---------------- HEALTH CHECK ---------------- */

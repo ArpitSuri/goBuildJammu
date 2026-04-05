@@ -1,0 +1,19 @@
+# robots.txt for https://www.digitalinfratech.in
+
+User-agent: *
+Allow: /
+Allow: /category/
+Allow: /product/
+
+# Disallow private and checkout pages to save "crawl budget"
+Disallow: /login
+Disallow: /signup
+Disallow: /cart
+Disallow: /checkout
+Disallow: /profile
+Disallow: /admin
+Disallow: /api/
+
+# Host and Sitemap location
+Host: https://www.digitalinfratech.in
+Sitemap: https://www.digitalinfratech.in/sitemap.xml

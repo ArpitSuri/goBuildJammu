@@ -3,6 +3,7 @@ import { useParams } from "react-router-dom";
 import { getProducts } from "../../services/productService";
 import { getVariantsByProduct } from "../../services/variantService";
 import { addToCart } from "../../services/cartService";
+import { Helmet } from "react-helmet-async";
 
 export default function ProductDetail() {
     const { id } = useParams();
@@ -66,9 +67,51 @@ export default function ProductDetail() {
 
     // Logic for availability
     const isOutOfStock = selected ? selected.stock <= 0 : true;
+    const siteUrl = `https://www.digitalinfratech.in/product/${id}`;
 
     return (
         <div className="max-w-7xl mx-auto p-6 grid grid-cols-1 lg:grid-cols-2 gap-10">
+            <Helmet>
+                <title>{`${product.name} | Buy Online in Lucknow - Digital Infratech`}</title>
+                <meta name="description" content={`Get the best price on ${product.name} by ${product.brand} in Lucknow. High-quality construction material with doorstep delivery. Shop now at Digital Infratech.`} />
+                <link rel="canonical" href={siteUrl} />
+
+                {/* Open Graph / Social Media */}
+                <meta property="og:type" content="product" />
+                <meta property="og:title" content={`${product.name} - Construction Materials Lucknow`} />
+                <meta property="og:description" content={product.description?.substring(0, 160)} />
+                <meta property="og:image" content={mainImage} />
+                <meta property="og:url" content={siteUrl} />
+                <meta property="product:price:amount" content={currentPrice} />
+                <meta property="product:price:currency" content="INR" />
+
+                {/* Product Schema for Google Search Rich Snippets */}
+                <script type="application/ld+json">
+                    {JSON.stringify({
+                        "@context": "https://schema.org/",
+                        "@type": "Product",
+                        "name": product.name,
+                        "image": product.images?.map(img => img.url),
+                        "description": product.description,
+                        "brand": {
+                            "@type": "Brand",
+                            "name": product.brand || "Digital Infratech"
+                        },
+                        "offers": {
+                            "@type": "Offer",
+                            "url": siteUrl,
+                            "priceCurrency": "INR",
+                            "price": currentPrice,
+                            "availability": isOutOfStock ? "https://schema.org/OutOfStock" : "https://schema.org/InStock",
+                            "itemCondition": "https://schema.org/NewCondition",
+                            "shippingDetails": {
+                                "@type": "OfferShippingDetails",
+                                "shippingDestination": { "@type": "DefinedRegion", "addressLocality": "Lucknow" }
+                            }
+                        }
+                    })}
+                </script>
+            </Helmet>
 
             {/* LEFT - IMAGE GALLERY SECTION */}
             <div className="flex flex-col gap-4">

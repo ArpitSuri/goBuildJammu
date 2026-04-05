@@ -2,8 +2,10 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 import { sendLoginOTP } from "../../services/authService";
 import OTPModal from "../../components/OtpModel";
+import { Helmet } from "react-helmet-async";
 
 export default function Login() {
+  const siteUrl = "https://www.digitalinfratech.in/login";
     const [phone, setPhone] = useState("");
     const [showOTP, setShowOTP] = useState(false);
 
@@ -18,6 +20,23 @@ export default function Login() {
     };
 
     return (
+      <>
+      <Helmet>
+        {/* Prevent search engines from indexing the login page */}
+        <meta name="robots" content="noindex, nofollow" />
+        
+        <title>Login | Digital Infratech - Lucknow's Construction Hub</title>
+        <meta name="description" content="Access your Digital Infratech account to manage your construction material orders and doorstep deliveries in Lucknow." />
+        
+        {/* Open Graph for branding */}
+        <meta property="og:title" content="Login to Digital Infratech" />
+        <meta property="og:description" content="Manage your building material and home accessory orders." />
+        <meta property="og:url" content={siteUrl} />
+        
+        {/* Specific focus on security/trust */}
+        <link rel="canonical" href={siteUrl} />
+      </Helmet>
+
   <div className="min-h-screen flex items-center justify-center bg-gray-100">
     <div className="bg-white p-8 rounded-2xl shadow-md w-full max-w-md text-center">
 
@@ -85,5 +104,6 @@ export default function Login() {
       data={{ phone }}
     />
   </div>
+      </>
 );
 }
