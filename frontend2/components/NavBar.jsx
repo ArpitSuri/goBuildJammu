@@ -1078,13 +1078,13 @@ export default function Navbar() {
             <AnnouncementBar />
 
             <nav className="font-sans bg-white/90 backdrop-blur-md sticky top-0 z-50 border-b border-gray-100">
-                <div className="flex items-center justify-between px-6 md:px-10 lg:px-16 py-5 w-full">
+                <div className="flex items-center justify-between px-4 sm:px-6 md:px-10 lg:px-16 py-4 sm:py-5 w-full">
                     
                     {/* Left: Logo */}
-                    <div className="flex items-center shrink-0">
-                        <Link to="/" className="flex items-center gap-3 text-xl text-black no-underline tracking-widest uppercase font-bold">
-                            <img src="/Logocropped.png" alt="DigitalInfratech Logo" className="h-10 sm:h-12 w-auto object-contain opacity-90 hover:opacity-100 transition-opacity" />
-                            <span className="hidden lg:block whitespace-nowrap">Digital Infratech</span>
+                    <div className="flex items-center shrink-0 min-w-0">
+                        <Link to="/" className="flex items-center gap-2 sm:gap-3 text-black no-underline tracking-widest uppercase font-bold min-w-0">
+                            <img src="/Logocropped.png" alt="DigitalInfratech Logo" className="h-8 sm:h-12 w-auto object-contain shrink-0 opacity-90 hover:opacity-100 transition-opacity" />
+                            <span className="text-[14px] sm:text-lg lg:text-xl whitespace-nowrap truncate">Digital Infratech</span>
                         </Link>
                     </div>
 

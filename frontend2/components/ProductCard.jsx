@@ -223,7 +223,7 @@ export default function ProductCard({ product }) {
             onClick={() => navigate(`/product/${product._id}`)}
         >
             {/* Top Image Box */}
-            <div className="relative h-[240px] bg-gray-50/50 flex items-center justify-center p-6 overflow-hidden">
+            <div className="relative h-[160px] sm:h-[240px] bg-gray-50/50 flex items-center justify-center p-4 sm:p-6 overflow-hidden">
                 {/* OFF Badge */}
                 {discountPercent > 0 && !isSoldOut && (
                     <div className="absolute top-3 left-3 bg-white border border-gray-100 text-black text-[10px] font-medium tracking-widest px-3 py-1.5 z-10 shadow-sm rounded-full">
@@ -253,25 +253,25 @@ export default function ProductCard({ product }) {
             </div>
 
             {/* Content Body */}
-            <div className="p-6 flex flex-col flex-grow">
-                <h3 className="text-[15px] font-medium text-gray-800 leading-relaxed min-h-[44px] overflow-hidden line-clamp-2 mb-3">
+            <div className="p-3 sm:p-6 flex flex-col flex-grow">
+                <h3 className="text-[13px] sm:text-[15px] font-medium text-gray-800 leading-snug sm:leading-relaxed min-h-[36px] sm:min-h-[44px] overflow-hidden line-clamp-2 mb-2 sm:mb-3">
                     {product.name}
                 </h3>
 
-                <div className="flex items-center gap-3 mb-5">
+                <div className="flex items-center gap-2 sm:gap-3 mb-3 sm:mb-5">
                     {originalPrice && (
-                        <span className="text-[13px] text-gray-400 line-through font-light">
+                        <span className="text-[11px] sm:text-[13px] text-gray-400 line-through font-light">
                             Rs. {originalPrice.toLocaleString()}
                         </span>
                     )}
-                    <span className="text-[16px] font-semibold text-black">
+                    <span className="text-[14px] sm:text-[16px] font-semibold text-black">
                         {actualPrice ? `Rs. ${actualPrice.toLocaleString()}` : "Price N/A"}
                     </span>
                 </div>
 
                 <div className="flex-grow"></div>
 
-                <div onClick={(e) => e.stopPropagation()} className="mt-4 space-y-4">
+                <div onClick={(e) => e.stopPropagation()} className="mt-2 sm:mt-4 space-y-3 sm:space-y-4">
                     {/* Variant Selector */}
                     {variants.length > 1 && (
                         <div className="relative">
@@ -281,7 +281,7 @@ export default function ProductCard({ product }) {
                                     const v = variants.find(v => v._id === e.target.value);
                                     if (v) setSelectedVariant(v);
                                 }}
-                                className="w-full appearance-none border border-gray-200 bg-gray-50/50 hover:bg-white hover:border-gray-300 rounded-full pl-4 pr-10 py-2.5 text-[13px] font-medium tracking-wide text-gray-700 focus:outline-none focus:border-black transition-all cursor-pointer shadow-sm"
+                                className="w-full appearance-none border border-gray-200 bg-gray-50/50 hover:bg-white hover:border-gray-300 rounded-full pl-3 sm:pl-4 pr-9 sm:pr-10 py-2 sm:py-2.5 text-[11px] sm:text-[13px] font-medium tracking-wide text-gray-700 focus:outline-none focus:border-black transition-all cursor-pointer shadow-sm"
                             >
                                 {variants.map(v => (
                                     <option key={v._id} value={v._id}>
@@ -297,12 +297,12 @@ export default function ProductCard({ product }) {
                     )}
 
                     {/* Quantity & Add Button */}
-                    <div className="flex gap-2.5">
-                        <div className="flex items-center justify-between border border-gray-200 w-[85px] px-1 py-0 bg-white rounded-full shadow-sm hover:border-gray-300 transition-colors shrink-0">
+                    <div className="flex flex-col sm:flex-row gap-2 sm:gap-2.5">
+                        <div className="flex items-center justify-between border border-gray-200 w-full sm:w-[85px] px-2 sm:px-1 py-0 bg-white rounded-full shadow-sm hover:border-gray-300 transition-colors shrink-0">
                             <button 
                                 onClick={() => !isSoldOut && setQuantity(q => Math.max(1, q - 1))} 
                                 disabled={quantity <= 1 || isSoldOut}
-                                className="text-gray-400 hover:text-black w-7 h-11 flex items-center justify-center cursor-pointer disabled:opacity-30 disabled:cursor-not-allowed transition-colors font-medium text-lg"
+                                className="text-gray-400 hover:text-black w-8 sm:w-7 h-10 sm:h-11 flex items-center justify-center cursor-pointer disabled:opacity-30 disabled:cursor-not-allowed transition-colors font-medium text-lg"
                             >
                                 −
                             </button>
@@ -310,7 +310,7 @@ export default function ProductCard({ product }) {
                             <button 
                                 onClick={() => !isSoldOut && setQuantity(q => q + 1)} 
                                 disabled={isSoldOut}
-                                className="text-gray-400 hover:text-black w-7 h-11 flex items-center justify-center cursor-pointer disabled:opacity-30 disabled:cursor-not-allowed transition-colors font-medium text-lg"
+                                className="text-gray-400 hover:text-black w-8 sm:w-7 h-10 sm:h-11 flex items-center justify-center cursor-pointer disabled:opacity-30 disabled:cursor-not-allowed transition-colors font-medium text-lg"
                             >
                                 +
                             </button>
@@ -318,7 +318,7 @@ export default function ProductCard({ product }) {
                         <button
                             onClick={handleAddToCart}
                             disabled={loading || isSoldOut || variants.length === 0}
-                            className={`flex-grow border h-11 flex items-center justify-center px-2 text-[10px] xl:text-[11px] font-bold tracking-widest uppercase whitespace-nowrap transition-all duration-300 rounded-full shadow-md hover:shadow-lg hover:-translate-y-[1px] ${
+                            className={`w-full sm:flex-grow border h-10 sm:h-11 flex items-center justify-center px-2 text-[10px] sm:text-[11px] font-bold tracking-widest uppercase whitespace-nowrap transition-all duration-300 rounded-full shadow-md hover:shadow-lg hover:-translate-y-[1px] ${
                                 added 
                                 ? 'bg-white border-black text-black' 
                                 : isSoldOut || variants.length === 0
