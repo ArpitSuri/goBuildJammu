@@ -168,7 +168,7 @@ export default function DeliveryModal({ isOpen, onClose, refresh, editData }) {
                     <button
                         onClick={handleSubmit}
                         disabled={loading}
-                        className="px-4 py-1 bg-yellow-400 hover:bg-yellow-500 text-black font-semibold rounded transition"
+                        className="px-4 py-1 bg-blue-600 hover:bg-blue-700 text-black font-semibold rounded transition"
                     >
                         {loading ? "Saving..." : "Save"}
                     </button>

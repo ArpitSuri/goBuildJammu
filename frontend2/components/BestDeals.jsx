@@ -71,100 +71,38 @@ export default function BestDeals() {
     };
 
     if (loading) return (
-        <>
-            <style>{`
-                .hr-deals-skeleton {
-                    max-width: 1400px; margin: 0 auto; padding: 32px 32px;
-                    font-family: 'Inter', sans-serif;
-                }
-                .hr-deals-skel-grid {
-                    display: grid;
-                    grid-template-columns: repeat(5, 1fr);
-                    gap: 16px;
-                    margin-top: 20px;
-                }
-                .hr-skel-card {
-                    background: #f5f5f5;
-                    border-radius: 10px;
-                    height: 320px;
-                    animation: skelPulse 1.4s ease-in-out infinite;
-                }
-                @keyframes skelPulse {
-                    0%, 100% { opacity: 1; }
-                    50% { opacity: 0.5; }
-                }
-            `}</style>
-            <div className="hr-deals-skeleton">
-                <div style={{ width: 200, height: 28, background: "#f0f0f0", borderRadius: 6, marginBottom: 8 }} />
-                <div style={{ width: 280, height: 18, background: "#f0f0f0", borderRadius: 6 }} />
-                <div className="hr-deals-skel-grid">
-                    {[...Array(5)].map((_, i) => <div key={i} className="hr-skel-card" />)}
-                </div>
+        <div className="max-w-[1400px] mx-auto w-full px-6 md:px-12 lg:px-20 py-16 font-sans">
+            <div className="h-8 w-64 bg-gray-100 mb-2 rounded animate-pulse"></div>
+            <div className="h-4 w-96 bg-gray-50 mb-10 rounded animate-pulse"></div>
+            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+                {[...Array(5)].map((_, i) => (
+                    <div key={i} className="h-80 bg-gray-50/50 border border-gray-100 animate-pulse"></div>
+                ))}
             </div>
-        </>
+        </div>
     );
 
     if (variants.length === 0) return null;
 
     return (
-        <>
-            <style>{`
-                .hr-deals-section {
-                    max-width: 1400px;
-                    margin: 0 auto;
-                    padding: 8px 32px 40px;
-                    font-family: 'Inter', sans-serif;
-                    border-top: 1px solid #f0f0f0;
-                }
-                .hr-deals-header {
-                    margin-bottom: 6px;
-                }
-                .hr-deals-title {
-                    font-size: 22px;
-                    font-weight: 700;
-                    color: #111;
-                    margin: 0 0 4px;
-                }
-                .hr-deals-sub {
-                    font-size: 13px;
-                    color: #888;
-                    margin: 0 0 20px;
-                }
-                .hr-deals-grid {
-                    display: grid;
-                    grid-template-columns: repeat(5, 1fr);
-                    gap: 16px;
-                }
-                @media (max-width: 1100px) {
-                    .hr-deals-grid { grid-template-columns: repeat(4, 1fr); }
-                }
-                @media (max-width: 860px) {
-                    .hr-deals-grid { grid-template-columns: repeat(3, 1fr); }
-                }
-                @media (max-width: 600px) {
-                    .hr-deals-section { padding: 24px 16px; }
-                    .hr-deals-grid { grid-template-columns: repeat(2, 1fr); gap: 10px; }
-                }
-            `}</style>
+        <section className="max-w-[1400px] mx-auto w-full px-6 md:px-12 lg:px-20 py-16 font-sans border-t border-gray-100">
+            <div className="mb-10 text-center md:text-left">
+                <h2 className="text-2xl lg:text-3xl font-light text-black tracking-tight mb-2">Deals of the Week</h2>
+                <p className="text-[14px] text-gray-500 font-light mb-4">{variants.length} products at our lowest ever price</p>
+                <div className="h-[1px] w-12 bg-black mx-auto md:mx-0"></div>
+            </div>
 
-            <section className="hr-deals-section">
-                <div className="hr-deals-header">
-                    <h2 className="hr-deals-title">Deals of the Week</h2>
-                    <p className="hr-deals-sub">{variants.length} products at our lowest ever price</p>
-                </div>
-
-                <div className="hr-deals-grid">
-                    {variants.map((variant) => (
-                        <ProductCard
-                            key={variant._id}
-                            product={{
-                                ...variant.product,
-                                preSelectedVariant: variant
-                            }}
-                        />
-                    ))}
-                </div>
-            </section>
-        </>
+            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 lg:gap-8">
+                {variants.map((variant) => (
+                    <ProductCard
+                        key={variant._id}
+                        product={{
+                            ...variant.product,
+                            preSelectedVariant: variant
+                        }}
+                    />
+                ))}
+            </div>
+        </section>
     );
 }

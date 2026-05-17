@@ -34,7 +34,7 @@ export default function Home() {
             "@type": "HardwareStore",
             "name": "Digital Infratech",
             "url": siteUrl,
-            "logo": `${siteUrl}logo.png`,
+            "logo": `${siteUrl}/logo2.png`,
             "image": `${siteUrl}storefront-lucknow.jpg`,
             "description": "Leading supplier of building materials, construction equipment, and home accessories in Lucknow, Uttar Pradesh.",
             "address": {

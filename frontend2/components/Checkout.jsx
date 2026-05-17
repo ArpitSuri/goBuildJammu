@@ -51,11 +51,12 @@ export default function Checkout() {
     if (!cart) return null;
 
     return (
-        <div className="max-w-2xl mx-auto p-6 min-h-screen">
+        <div className="max-w-xl mx-auto p-6 md:p-10 min-h-screen font-sans">
             {/* Step Indicators */}
-            <div className="flex justify-between mb-10 px-4">
+            <div className="flex justify-between items-center mb-16 relative">
+                <div className="absolute left-0 right-0 top-1/2 h-[1px] bg-gray-200 -z-10"></div>
                 {[1, 2, 3, 4].map(s => (
-                    <div key={s} className={`w-10 h-10 rounded-full flex items-center justify-center font-bold transition-colors ${step >= s ? "bg-[#FADB5F] text-black" : "bg-gray-100 text-gray-400"}`}>
+                    <div key={s} className={`w-10 h-10 flex items-center justify-center text-[12px] font-medium transition-all duration-300 ${step >= s ? "bg-black text-white border border-black" : "bg-white text-gray-400 border border-gray-200"}`}>
                         {s}
                     </div>
                 ))}
@@ -63,18 +64,21 @@ export default function Checkout() {
 
             {/* STEP 1: PINCODE CHECK */}
             {step === 1 && (
-                <div className="space-y-6 animate-in fade-in">
-                    <h2 className="text-3xl font-black italic uppercase tracking-tighter">1. Delivery Check</h2>
+                <div className="space-y-8 animate-in fade-in">
+                    <div>
+                        <h2 className="text-2xl font-light tracking-tight text-black mb-2">Delivery Check</h2>
+                        <div className="h-[1px] w-8 bg-black"></div>
+                    </div>
                     <input
                         type="text"
                         placeholder="Enter 6-digit Pincode"
-                        className="w-full border-2 border-gray-100 p-5 rounded-2xl text-2xl font-bold focus:border-[#FADB5F] outline-none"
+                        className="w-full border border-gray-200 px-6 py-4 text-[14px] font-light text-black placeholder:text-gray-400 focus:border-black outline-none transition-colors"
                         value={formData.pincode}
                         onChange={e => setFormData({ ...formData, pincode: e.target.value })}
                     />
                     <button
                         onClick={() => SERVICEABLE_PINS.includes(formData.pincode) ? setStep(2) : alert("Sorry, we don't deliver here yet.")}
-                        className="w-full bg-black text-white py-5 rounded-2xl font-bold text-lg hover:bg-gray-900 transition"
+                        className="w-full bg-black text-white py-4 text-[12px] font-medium tracking-widest uppercase hover:bg-white hover:text-black border border-black transition-all duration-300 shadow-lg shadow-black/10 hover:shadow-none"
                     >
                         Verify Location
                     </button>
@@ -83,31 +87,39 @@ export default function Checkout() {
 
             {/* STEP 2: ADDRESS CONCATENATION BOX */}
             {step === 2 && (
-                <div className="space-y-4 animate-in slide-in-from-right">
-                    <h2 className="text-3xl font-black italic uppercase tracking-tighter">2. Shipping Details</h2>
+                <div className="space-y-6 animate-in slide-in-from-right">
+                    <div>
+                        <h2 className="text-2xl font-light tracking-tight text-black mb-2">Shipping Details</h2>
+                        <div className="h-[1px] w-8 bg-black"></div>
+                    </div>
                     <input
                         placeholder="House / Flat / Plot No."
-                        className="w-full border-2 border-gray-50 p-4 rounded-xl outline-none focus:border-[#FADB5F]"
+                        className="w-full border border-gray-200 px-6 py-4 text-[14px] font-light text-black placeholder:text-gray-400 focus:border-black outline-none transition-colors"
                         onChange={e => setFormData({ ...formData, houseNo: e.target.value })}
+                        value={formData.houseNo}
                     />
                     <textarea
                         placeholder="Area / Colony / Street Name"
-                        className="w-full border-2 border-gray-50 p-4 rounded-xl h-32 outline-none focus:border-[#FADB5F]"
+                        className="w-full border border-gray-200 px-6 py-4 h-32 text-[14px] font-light text-black placeholder:text-gray-400 focus:border-black outline-none transition-colors resize-none"
                         onChange={e => setFormData({ ...formData, area: e.target.value })}
+                        value={formData.area}
                     />
                     <input
                         placeholder="Landmark (Optional)"
-                        className="w-full border-2 border-gray-50 p-4 rounded-xl outline-none focus:border-[#FADB5F]"
+                        className="w-full border border-gray-200 px-6 py-4 text-[14px] font-light text-black placeholder:text-gray-400 focus:border-black outline-none transition-colors"
                         onChange={e => setFormData({ ...formData, landmark: e.target.value })}
+                        value={formData.landmark}
                     />
                     <div className="flex gap-4 pt-4">
-                        <button onClick={() => setStep(1)} className="flex-1 py-4 font-bold text-gray-400">Back</button>
+                        <button onClick={() => setStep(1)} className="flex-1 py-4 text-[12px] font-medium tracking-widest uppercase text-gray-500 hover:text-black transition-colors border border-gray-200">
+                            Back
+                        </button>
                         <button
                             disabled={!formData.houseNo || !formData.area}
                             onClick={() => setStep(3)}
-                            className="flex-[2] bg-black text-white py-4 rounded-xl font-bold disabled:opacity-30"
+                            className="flex-[2] bg-black text-white py-4 text-[12px] font-medium tracking-widest uppercase hover:bg-white hover:text-black border border-black transition-all duration-300 disabled:opacity-30 disabled:hover:bg-black disabled:hover:text-white"
                         >
-                            Continue to Payment
+                            Continue
                         </button>
                     </div>
                 </div>
@@ -115,36 +127,43 @@ export default function Checkout() {
 
             {/* STEP 3: PAYMENT METHOD */}
             {step === 3 && (
-                <div className="space-y-6 animate-in slide-in-from-right">
-                    <h2 className="text-3xl font-black italic uppercase tracking-tighter">3. Payment</h2>
-                    <div className="space-y-3">
+                <div className="space-y-8 animate-in slide-in-from-right">
+                    <div>
+                        <h2 className="text-2xl font-light tracking-tight text-black mb-2">Payment</h2>
+                        <div className="h-[1px] w-8 bg-black"></div>
+                    </div>
+                    <div className="space-y-4">
                         {/* COD Option */}
-                        <label className={`flex items-center justify-between p-6 border-2 rounded-2xl cursor-pointer transition ${formData.paymentMethod === 'COD' ? 'border-[#FADB5F] bg-yellow-50/50' : 'border-gray-50'}`}>
+                        <label className={`flex items-center justify-between p-6 border cursor-pointer transition-colors ${formData.paymentMethod === 'COD' ? 'border-black bg-gray-50' : 'border-gray-200'}`}>
                             <div className="flex items-center gap-4">
-                                <input type="radio" checked={formData.paymentMethod === 'COD'} onChange={() => setFormData({ ...formData, paymentMethod: 'COD' })} className="w-5 h-5 accent-black" />
+                                <input type="radio" checked={formData.paymentMethod === 'COD'} onChange={() => setFormData({ ...formData, paymentMethod: 'COD' })} className="w-4 h-4 accent-black" />
                                 <div>
-                                    <p className="font-bold text-lg">Cash on Delivery</p>
-                                    <p className="text-xs text-gray-500 font-medium">Pay securely at your doorstep</p>
+                                    <p className="text-[14px] font-medium text-black tracking-wide">Cash on Delivery</p>
+                                    <p className="text-[12px] font-light text-gray-500 mt-1">Pay securely at your doorstep</p>
                                 </div>
                             </div>
-                            <span className="text-2xl">💵</span>
+                            <span className="text-xl opacity-60">💵</span>
                         </label>
 
                         {/* Disabled Online Option */}
-                        <div className="flex items-center justify-between p-6 border-2 border-gray-50 rounded-2xl opacity-40 cursor-not-allowed grayscale">
+                        <div className="flex items-center justify-between p-6 border border-gray-200 opacity-40 cursor-not-allowed grayscale">
                             <div className="flex items-center gap-4">
-                                <div className="w-5 h-5 border-2 border-gray-300 rounded-full" />
+                                <div className="w-4 h-4 border border-gray-300 rounded-full" />
                                 <div>
-                                    <p className="font-bold text-lg">Online (UPI / Cards)</p>
-                                    <p className="text-[10px] font-black text-yellow-600 tracking-tighter uppercase">Currently Unavailable</p>
+                                    <p className="text-[14px] font-medium text-black tracking-wide">Online (UPI / Cards)</p>
+                                    <p className="text-[10px] font-medium tracking-widest uppercase text-gray-500 mt-1">Currently Unavailable</p>
                                 </div>
                             </div>
-                            <span className="text-2xl">💳</span>
+                            <span className="text-xl opacity-60">💳</span>
                         </div>
                     </div>
                     <div className="flex gap-4 pt-4">
-                        <button onClick={() => setStep(2)} className="flex-1 py-4 font-bold text-gray-400">Back</button>
-                        <button onClick={() => setStep(4)} className="flex-[2] bg-black text-white py-4 rounded-xl font-bold">Review Order</button>
+                        <button onClick={() => setStep(2)} className="flex-1 py-4 text-[12px] font-medium tracking-widest uppercase text-gray-500 hover:text-black transition-colors border border-gray-200">
+                            Back
+                        </button>
+                        <button onClick={() => setStep(4)} className="flex-[2] bg-black text-white py-4 text-[12px] font-medium tracking-widest uppercase hover:bg-white hover:text-black border border-black transition-all duration-300">
+                            Review Order
+                        </button>
                     </div>
                 </div>
             )}
@@ -152,32 +171,40 @@ export default function Checkout() {
             {/* STEP 4: FINAL REVIEW */}
             {step === 4 && (
                 <div className="space-y-8 animate-in zoom-in-95">
-                    <h2 className="text-3xl font-black italic uppercase tracking-tighter">4. Review</h2>
-                    <div className="bg-gray-50 p-6 rounded-3xl border border-dashed border-gray-200 space-y-4">
+                    <div>
+                        <h2 className="text-2xl font-light tracking-tight text-black mb-2">Review</h2>
+                        <div className="h-[1px] w-8 bg-black"></div>
+                    </div>
+                    <div className="bg-white p-8 border border-gray-200 space-y-6">
                         <div>
-                            <p className="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-1">Shipping To</p>
-                            <p className="font-bold text-gray-800 leading-tight">
+                            <p className="text-[10px] font-medium text-gray-400 uppercase tracking-widest mb-3">Shipping To</p>
+                            <p className="text-[14px] font-light text-gray-800 leading-relaxed">
                                 {formData.houseNo}, {formData.area} <br />
-                                {formData.landmark && <span className="text-sm font-medium text-gray-500">Near {formData.landmark}</span>}
-                                <span className="block mt-1 font-black text-[#FADB5F]">{formData.pincode}</span>
+                                {formData.landmark && <span className="block mt-1">Near {formData.landmark}</span>}
+                                <span className="block mt-3 text-[13px] font-medium text-black tracking-widest uppercase">PIN: {formData.pincode}</span>
                             </p>
                         </div>
-                        <div className="pt-4 border-t border-gray-200 flex justify-between items-center">
+                        <div className="pt-6 border-t border-gray-100 flex justify-between items-center">
                             <div>
-                                <p className="text-[10px] font-black text-gray-400 uppercase tracking-widest">Payment</p>
-                                <p className="font-bold">{formData.paymentMethod === 'COD' ? 'Cash on Delivery' : 'Online'}</p>
+                                <p className="text-[10px] font-medium text-gray-400 uppercase tracking-widest mb-2">Payment</p>
+                                <p className="text-[13px] font-medium text-black tracking-widest uppercase">{formData.paymentMethod === 'COD' ? 'Cash on Delivery' : 'Online'}</p>
                             </div>
-                            <button onClick={() => setStep(3)} className="text-xs font-bold text-gray-400 underline uppercase">Edit</button>
+                            <button onClick={() => setStep(3)} className="text-[10px] font-medium text-gray-400 hover:text-black uppercase tracking-widest transition-colors border-b border-gray-400 hover:border-black">Edit</button>
                         </div>
                     </div>
 
-                    <button
-                        onClick={handleOrder}
-                        disabled={loading}
-                        className="w-full bg-[#FADB5F] hover:bg-yellow-400 text-black py-5 rounded-2xl font-black text-2xl shadow-xl shadow-yellow-100 transition active:scale-95 disabled:opacity-50"
-                    >
-                        {loading ? "PROCESSING..." : "PLACE ORDER NOW"}
-                    </button>
+                    <div className="flex gap-4 pt-4">
+                        <button onClick={() => setStep(3)} className="flex-1 py-4 text-[12px] font-medium tracking-widest uppercase text-gray-500 hover:text-black transition-colors border border-gray-200 disabled:opacity-50" disabled={loading}>
+                            Back
+                        </button>
+                        <button
+                            onClick={handleOrder}
+                            disabled={loading}
+                            className="flex-[2] bg-black text-white py-4 text-[12px] font-medium tracking-widest uppercase hover:bg-white hover:text-black border border-black transition-all duration-300 shadow-lg shadow-black/10 hover:shadow-none disabled:opacity-50 disabled:hover:bg-black disabled:hover:text-white"
+                        >
+                            {loading ? "PROCESSING..." : "PLACE ORDER"}
+                        </button>
+                    </div>
                 </div>
             )}
         </div>

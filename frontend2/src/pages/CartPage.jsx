@@ -77,7 +77,7 @@ export default function CartPage() {
                 <p className="text-gray-500 mb-8">Looks like you haven't added anything yet.</p>
                 <button
                     onClick={() => navigate("/")}
-                    className="bg-[#FADB5F] hover:bg-yellow-500 text-black px-10 py-3.5 rounded-full font-bold transition shadow-md active:scale-95"
+                    className="bg-black text-white px-10 py-4 text-[12px] font-medium tracking-widest uppercase hover:bg-gray-900 border border-black transition-all duration-300 shadow-lg shadow-black/10 hover:shadow-none rounded-full"
                 >
                     Start Shopping
                 </button>
@@ -112,9 +112,9 @@ export default function CartPage() {
                                 {/* Image Container */}
                                 <div className="w-full sm:w-32 h-32 bg-white border border-gray-100 rounded-2xl flex items-center justify-center shrink-0 overflow-hidden shadow-sm group-hover:shadow-md transition-shadow">
                                     {itemImage ? (
-                                        <img src={itemImage} alt={item.name} className="w-full h-full object-contain p-3" />
+                                        <img src={itemImage} alt={item.name} className="w-full h-full object-contain p-3 mix-blend-multiply" />
                                     ) : (
-                                        <div className="text-[10px] font-bold text-gray-300 uppercase">No Image</div>
+                                        <div className="text-[10px] font-medium text-gray-400 uppercase tracking-widest">No Image</div>
                                     )}
                                 </div>
 
@@ -123,19 +123,19 @@ export default function CartPage() {
                                     <div>
                                         <div className="flex justify-between items-start">
                                             <div>
-                                                <p className="text-[10px] font-black text-green-700 uppercase tracking-widest mb-1">
+                                                <p className="text-[10px] font-medium text-gray-500 uppercase tracking-widest mb-1">
                                                     {product?.brand || "Brand"}
                                                 </p>
-                                                <h3 className="font-bold text-gray-900 text-xl leading-tight mb-1">
+                                                <h3 className="font-light text-black text-xl leading-tight mb-1">
                                                     {item.name}
                                                 </h3>
-                                                <p className="text-sm text-gray-500 font-medium">SKU: {variant?.sku}</p>
+                                                <p className="text-[12px] text-gray-400 font-light">SKU: {variant?.sku}</p>
                                             </div>
                                             <div className="text-right">
-                                                <p className="font-black text-gray-950 text-xl">
+                                                <p className="font-medium text-black text-xl">
                                                     Rs. {(item.price * item.quantity).toLocaleString()}
                                                 </p>
-                                                <p className="text-xs text-gray-400 font-medium">
+                                                <p className="text-[12px] text-gray-400 font-light">
                                                     Rs. {item.price.toLocaleString()} / unit
                                                 </p>
                                             </div>
@@ -149,18 +149,18 @@ export default function CartPage() {
                                     </div>
 
                                     <div className="flex items-center justify-between mt-4">
-                                        <div className="flex items-center bg-gray-50 rounded-xl p-1 border border-gray-100">
+                                        <div className="flex items-center bg-white border border-gray-200 rounded-full overflow-hidden">
                                             <button
                                                 disabled={item.quantity <= 1}
                                                 onClick={() => handleQtyChange(variant, item.quantity - 1)}
-                                                className="w-8 h-8 flex items-center justify-center text-gray-500 hover:text-black font-bold disabled:opacity-20"
+                                                className="w-8 h-8 flex items-center justify-center text-gray-500 hover:text-black hover:bg-gray-50 transition-colors disabled:opacity-20"
                                             >
                                                 −
                                             </button>
-                                            <span className="w-10 text-center font-bold text-gray-900">{item.quantity}</span>
+                                            <span className="w-10 text-center font-medium text-[13px] text-black">{item.quantity}</span>
                                             <button
                                                 onClick={() => handleQtyChange(variant, item.quantity + 1)}
-                                                className="w-8 h-8 flex items-center justify-center text-gray-900 hover:text-green-700 font-bold"
+                                                className="w-8 h-8 flex items-center justify-center text-gray-500 hover:text-black hover:bg-gray-50 transition-colors"
                                             >
                                                 +
                                             </button>
@@ -183,9 +183,9 @@ export default function CartPage() {
                 </div>
 
                 {/* RIGHT: SUMMARY CARD */}
-                <div className="lg:sticky lg:top-8 h-fit">
-                    <div className="bg-gray-50 border border-gray-100 rounded-3xl p-8 shadow-sm">
-                        <h2 className="text-xl font-bold text-gray-900 mb-6">Order Summary</h2>
+                <div className="lg:sticky lg:top-8 h-fit font-sans">
+                    <div className="bg-white border border-gray-200 rounded-3xl p-8 shadow-sm">
+                        <h2 className="text-lg font-light text-black tracking-tight mb-8">Order Summary</h2>
 
                         <div className="space-y-4 mb-8">
                             <div className="flex justify-between text-gray-600 font-medium">
@@ -207,7 +207,7 @@ export default function CartPage() {
 
                         <button
                             onClick={() => navigate("/checkout")}
-                            className="w-full bg-[#FADB5F] hover:bg-yellow-500 text-black font-black py-4 rounded-2xl transition shadow-lg shadow-yellow-100 uppercase tracking-widest active:scale-95 mb-4"
+                            className="w-full bg-black text-white text-[12px] font-medium tracking-widest uppercase py-4 border border-black hover:bg-gray-900 transition-all duration-300 mb-4 shadow-lg shadow-black/10 hover:shadow-none rounded-full"
                         >
                             Proceed to Checkout
                         </button>
@@ -221,11 +221,11 @@ export default function CartPage() {
                     </div>
 
                     {/* HELP BOX */}
-                    <div className="mt-6 p-4 bg-blue-50/50 border border-blue-100 rounded-2xl flex gap-3">
-                        <span className="text-xl">🛡️</span>
+                    <div className="mt-6 p-5 bg-gray-50 border border-gray-100 rounded-2xl flex gap-4">
+                        <span className="text-xl opacity-60">🛡️</span>
                         <div>
-                            <p className="text-xs font-bold text-blue-900">Secure Checkout</p>
-                            <p className="text-[10px] text-blue-700 leading-tight mt-0.5">Your data is protected by industry-standard encryption.</p>
+                            <p className="text-[12px] font-medium text-black tracking-widest uppercase mb-1">Secure Checkout</p>
+                            <p className="text-[11px] text-gray-500 font-light leading-relaxed">Your data is protected by industry-standard encryption.</p>
                         </div>
                     </div>
                 </div>

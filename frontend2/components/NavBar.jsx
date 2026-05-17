@@ -168,7 +168,7 @@
 //                 >
 //                     🛒
 //                     {cartCount > 0 && (
-//                         <span className="absolute -top-2 -right-2 bg-yellow-400 text-xs px-1 rounded-full">
+//                         <span className="absolute -top-2 -right-2 bg-blue-600 text-xs px-1 rounded-full">
 //                             {cartCount}
 //                         </span>
 //                     )}
@@ -317,7 +317,7 @@
 
 //     return (
 //         <div style={{
-//             background: "#FFD700",
+//             background: "#2563eb",
 //             padding: "8px 16px",
 //             textAlign: "center",
 //             fontSize: "13px",
@@ -463,7 +463,7 @@
 //           padding: 0;
 //         }
 //         .gb-mins-box {
-//           background: #22c55e;
+//           background: #e5e7eb;
 //           color: #fff;
 //           font-size: 11px;
 //           font-weight: 700;
@@ -493,7 +493,7 @@
 //           gap: 6px;
 //         }
 //         .gb-logo-icon {
-//           background: #FFD700;
+//           background: #2563eb;
 //           width: 36px;
 //           height: 36px;
 //           border-radius: 8px;
@@ -525,7 +525,7 @@
 //           position: absolute;
 //           top: -6px;
 //           right: -8px;
-//           background: #FFD700;
+//           background: #2563eb;
 //           color: #111;
 //           font-size: 10px;
 //           font-weight: 700;
@@ -574,7 +574,7 @@
 //         }
 //         .gb-nav-link:hover, .gb-nav-item:hover .gb-nav-link {
 //           color: #000;
-//           border-bottom-color: #FFD700;
+//           border-bottom-color: #2563eb;
 //         }
 
 //         /* Dropdown */
@@ -585,7 +585,7 @@
 //           min-width: 220px;
 //           background: #fff;
 //           box-shadow: 0 8px 30px rgba(0,0,0,0.12);
-//           border-top: 3px solid #FFD700;
+//           border-top: 3px solid #2563eb;
 //           border-radius: 0 0 8px 8px;
 //           opacity: 0;
 //           pointer-events: none;
@@ -691,7 +691,7 @@
 //           box-sizing: border-box;
 //           transition: border-color 0.2s;
 //         }
-//         .gb-modal input:focus { border-color: #FFD700; }
+//         .gb-modal input:focus { border-color: #2563eb; }
 //         .gb-modal .err { font-size: 12px; color: #ef4444; margin-top: 6px; }
 //         .gb-modal .gb-modal-btns {
 //           display: flex;
@@ -711,7 +711,7 @@
 //         }
 //         .gb-modal .gb-modal-btns button:hover { opacity: 0.85; }
 //         .gb-btn-cancel { background: #f0f0f0; color: #333; }
-//         .gb-btn-save { background: #FFD700; color: #111; }
+//         .gb-btn-save { background: #2563eb; color: #111; }
 
 //         /* Mobile hamburger */
 //         .gb-hamburger {
@@ -954,9 +954,9 @@ import { Search, User, ShoppingCart, ChevronDown, MapPin, Menu, X, Zap } from "l
 //  Announcement Bar (marquee style)
 // ─────────────────────────────────────────────
 const ANNOUNCEMENTS = [
-    "🚀 Superfast delivery in LUCKNOW!",
-    "🏗️ 100% Genuine Construction Materials",
-    "🆓 Free delivery on orders above ₹5,000",
+    "Superfast delivery in LUCKNOW!",
+    "100% Genuine Construction Materials",
+    "Free delivery on orders above ₹5,000",
     "📞 Open 8am to 8pm · All Days",
 ];
 
@@ -976,9 +976,9 @@ function AnnouncementBar() {
     }, []);
 
     return (
-        <div className="bg-yellow-400 py-2 px-4 text-center text-[13px] font-semibold tracking-wide text-gray-900 relative overflow-hidden">
+        <div className="bg-green-700 border-b border-gray-100 py-2 px-4 text-center text-[12px] font-medium tracking-widest text-white uppercase relative overflow-hidden">
             <span
-                className={`inline-block transition-opacity duration-400 ease-in-out ${fade ? "opacity-100" : "opacity-0"}`}
+                className={`inline-block transition-opacity duration-500 ease-in-out ${fade ? "opacity-100" : "opacity-0"}`}
             >
                 {ANNOUNCEMENTS[idx]}
             </span>
@@ -1056,7 +1056,7 @@ export default function Navbar() {
 
     const handlePinSubmit = () => {
         if (!SERVICEABLE_PINS.includes(inputPin)) {
-            setPinError("❌ Sorry, we don't deliver to this location yet.");
+            setPinError("Sorry, we don't deliver to this location yet.");
             return;
         }
         localStorage.setItem("pincode", inputPin);
@@ -1077,116 +1077,38 @@ export default function Navbar() {
         <>
             <AnnouncementBar />
 
-            <nav className="font-sans bg-white sticky top-0 z-50 shadow-sm border-b border-gray-100">
-                {/* ── Middle Row ── */}
-                <div className="relative">
-                    <div className="flex items-center justify-between px-4 md:px-8 py-3 max-w-[1400px] mx-auto w-full">
-
-                        {/* Left: Delivery badge */}
-                        <button
-                            className="flex items-center gap-2 cursor-pointer bg-transparent border-none p-0 focus:outline-none"
-                            onClick={() => setShowModal(true)}
-                        >
-                            {/* <div className="bg-green-500 text-white text-[11px] font-bold rounded-md px-1.5 py-1 leading-tight text-center min-w-[36px]">
-                                <span className="block text-base font-extrabold">60</span>
-                                Mins
-                            </div> */}
-                            <div className="text-left hidden sm:block">
-                                <small className="block text-[10px] text-gray-500 font-medium">Deliver To</small>
-                                <strong className="flex items-center gap-1 text-[13px] text-gray-900 font-semibold">
-                                    <MapPin size={14} className="text-gray-700" />
-                                    {pincode} <ChevronDown size={14} />
-                                </strong>
-                            </div>
-                        </button>
-
-                        {/* Center: Logo */}
-                        <Link to="/" className="absolute left-1/2 -translate-x-1/2 flex items-center gap-2 text-xl font-extrabold text-gray-900 no-underline tracking-tight">
-                            <div className="bg-yellow-400 w-9 h-9 rounded-lg flex items-center justify-center text-gray-900">
-                                <Zap size={20} className="fill-current" />
-                            </div>
-                            <span className="hidden sm:block">DigitalInfratech</span>
+            <nav className="font-sans bg-white/90 backdrop-blur-md sticky top-0 z-50 border-b border-gray-100">
+                <div className="flex items-center justify-between px-6 md:px-10 lg:px-16 py-5 w-full">
+                    
+                    {/* Left: Logo */}
+                    <div className="flex items-center shrink-0">
+                        <Link to="/" className="flex items-center gap-3 text-xl text-black no-underline tracking-widest uppercase font-bold">
+                            <img src="/Logocropped.png" alt="DigitalInfratech Logo" className="h-10 sm:h-12 w-auto object-contain opacity-90 hover:opacity-100 transition-opacity" />
+                            <span className="hidden lg:block whitespace-nowrap">Digital Infratech</span>
                         </Link>
-
-                        {/* Right: Icons */}
-                        <div className="flex items-center gap-4 sm:gap-6 relative z-10">
-
-                            {/* Mobile hamburger */}
-                            <button className="md:hidden flex flex-col items-center justify-center p-1 text-gray-800 focus:outline-none hover:text-yellow-500 transition-colors" onClick={() => setMobileOpen(p => !p)}>
-                                {mobileOpen ? <X size={24} /> : <Menu size={24} />}
-                            </button>
-
-                            <button className="text-gray-800 hover:text-yellow-500 cursor-pointer transition-colors p-1" onClick={() => navigate("/search")} title="Search">
-                                <Search size={22} />
-                            </button>
-
-                            {/* User dropdown */}
-                            <div ref={userMenuRef} className="relative hidden md:block">
-                                <button
-                                    className="text-gray-800 hover:text-yellow-500 cursor-pointer transition-colors p-1 focus:outline-none flex items-center"
-                                    onClick={() => setShowUserMenu(p => !p)}
-                                    title="Account"
-                                >
-                                    <User size={22} />
-                                </button>
-                                {showUserMenu && (
-                                    <div className="absolute top-[calc(100%+10px)] right-0 min-w-[170px] bg-white border border-gray-200 rounded-xl shadow-lg overflow-hidden z-[9999] animate-in fade-in zoom-in-95 duration-150">
-                                        {!token ? (
-                                            <>
-                                                <button className="block w-full text-left px-4 py-3 text-[13.5px] cursor-pointer font-medium text-gray-800 hover:bg-gray-50 transition-colors" onClick={() => { navigate("/login"); setShowUserMenu(false); }}>Login</button>
-                                                <button className="block w-full text-left px-4 py-3 text-[13.5px] cursor-pointer font-medium text-gray-800 hover:bg-gray-50 transition-colors" onClick={() => { navigate("/signup"); setShowUserMenu(false); }}>Sign Up</button>
-                                            </>
-                                        ) : (
-                                            <>
-                                                <button className="block w-full text-left px-4 py-3 text-[13.5px] cursor-pointer font-medium text-gray-800 hover:bg-gray-50 transition-colors" onClick={() => { navigate("/my-profile"); setShowUserMenu(false); }}>My Profile</button>
-                                                <button className="block w-full text-left px-4 py-3 text-[13.5px] cursor-pointer font-medium text-gray-800 hover:bg-gray-50 transition-colors" onClick={() => { navigate("/my-orders"); setShowUserMenu(false); }}>My Orders</button>
-                                                <hr className="border-t border-gray-100 my-1" />
-                                                <button className="block w-full text-left px-4 py-3 text-[13.5px] cursor-pointer font-medium text-red-500 hover:bg-red-50 transition-colors" onClick={handleLogout}>Logout</button>
-                                            </>
-                                        )}
-                                    </div>
-                                )}
-                            </div>
-
-                            {/* Cart */}
-                            <button className="text-gray-800 hover:text-yellow-500 transition-colors cursor-pointer p-1 relative flex items-center" onClick={() => navigate("/cart")} title="Cart">
-                                <ShoppingCart size={22} />
-                                {cartCount > 0 && (
-                                    <span className="absolute -top-1.5 -right-2 bg-yellow-400 text-gray-900 text-[10px] font-bold w-[18px] h-[18px] rounded-full flex items-center justify-center">
-                                        {cartCount}
-                                    </span>
-                                )}
-                            </button>
-
-                        </div>
                     </div>
-                </div>
 
-                {/* ── Bottom Nav Row (Desktop) ── */}
-                <div className="hidden md:block border-t border-gray-100">
-                    <div className="flex items-center gap-2 max-w-[1400px] mx-auto px-8">
-
+                    {/* Middle: Navigation Links (Desktop) */}
+                    <div className="hidden md:flex items-center justify-center gap-6 xl:gap-10 flex-1 px-8">
                         <div className="relative group">
-                            <Link to="/" className="flex items-center gap-1.5 px-3 py-3 text-sm font-medium text-gray-800 whitespace-nowrap border-b-[3px] border-transparent hover:text-black hover:border-yellow-400 transition-all duration-200">
+                            <Link to="/" className="text-[13px] font-medium tracking-widest uppercase text-gray-600 hover:text-black transition-colors duration-300 whitespace-nowrap">
                                 Home
                             </Link>
                         </div>
-
                         {parentCats.map(parent => (
                             <div key={parent._id} className="relative group">
-                                <span className="flex items-center gap-1 px-3 py-3 text-sm font-medium text-gray-800 whitespace-nowrap border-b-[3px] border-transparent hover:text-black hover:border-yellow-400 transition-all duration-200 cursor-pointer select-none">
+                                <span className="text-[13px] font-medium tracking-widest uppercase text-gray-600 hover:text-black transition-colors duration-300 cursor-pointer select-none whitespace-nowrap">
                                     {parent.name}
-                                    {childMap[parent._id] && (
-                                        <ChevronDown size={14} className="opacity-60" />
-                                    )}
                                 </span>
                                 {childMap[parent._id] && (
-                                    <div className="absolute top-full left-0 min-w-[220px] bg-white shadow-[0_8px_30px_rgba(0,0,0,0.12)] border-t-[3px] border-yellow-400 rounded-b-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible translate-y-2 group-hover:translate-y-0 transition-all duration-200 z-[999]">
-                                        {childMap[parent._id].map((child, index) => (
+                                    <div className="absolute top-full left-1/2 -translate-x-1/2 mt-5 min-w-[200px] bg-white shadow-[0_20px_40px_-10px_rgba(0,0,0,0.05)] border border-gray-100 opacity-0 invisible group-hover:opacity-100 group-hover:visible translate-y-2 group-hover:translate-y-0 transition-all duration-300 z-[999] p-2">
+                                        {/* Invisible area to connect hover */}
+                                        <div className="absolute -top-5 left-0 right-0 h-5 bg-transparent"></div>
+                                        {childMap[parent._id].map((child) => (
                                             <Link
                                                 key={child._id}
                                                 to={`/category/${child._id}`}
-                                                className={`block px-5 py-3 text-[13.5px] text-gray-700 hover:bg-yellow-50 hover:text-black hover:font-medium hover:pl-6 transition-all duration-200 ${index !== childMap[parent._id].length - 1 ? 'border-b border-gray-50' : ''} ${index === childMap[parent._id].length - 1 ? 'rounded-b-lg' : ''}`}
+                                                className="block px-4 py-2.5 text-[13px] font-light text-gray-500 hover:text-black hover:bg-gray-50/50 transition-colors duration-200 text-center whitespace-nowrap"
                                             >
                                                 {child.name}
                                             </Link>
@@ -1195,32 +1117,96 @@ export default function Navbar() {
                                 )}
                             </div>
                         ))}
+                    </div>
 
+                    {/* Right: Icons and Delivery */}
+                    <div className="flex items-center gap-5 sm:gap-6 shrink-0 relative z-10">
+                        {/* Delivery badge (Right aligned now, hidden on smaller screens to save space) */}
+                        <button
+                            className="hidden xl:flex items-center gap-2 cursor-pointer bg-transparent border-none p-0 focus:outline-none group text-left mr-2"
+                            onClick={() => setShowModal(true)}
+                        >
+                            <div>
+                                <small className="block text-[9px] text-gray-400 font-medium tracking-widest uppercase mb-0.5">Deliver To</small>
+                                <strong className="flex items-center gap-1.5 text-[12px] text-gray-800 font-medium group-hover:text-black transition-colors">
+                                    <MapPin size={14} strokeWidth={1.5} className="text-gray-400 group-hover:text-black transition-colors" />
+                                    {pincode} <ChevronDown size={12} strokeWidth={1.5} className="opacity-50" />
+                                </strong>
+                            </div>
+                        </button>
+
+                        {/* Mobile hamburger */}
+                        <button className="md:hidden flex flex-col items-center justify-center p-1 text-gray-500 focus:outline-none hover:text-black transition-colors" onClick={() => setMobileOpen(p => !p)}>
+                            {mobileOpen ? <X size={22} strokeWidth={1.5} /> : <Menu size={22} strokeWidth={1.5} />}
+                        </button>
+
+                        <button className="text-gray-500 hover:text-black cursor-pointer transition-colors p-1" onClick={() => navigate("/search")} title="Search">
+                            <Search size={20} strokeWidth={1.5} />
+                        </button>
+
+                        {/* User dropdown */}
+                        <div ref={userMenuRef} className="relative hidden md:block">
+                            <button
+                                className="text-gray-500 hover:text-black cursor-pointer transition-colors p-1 focus:outline-none flex items-center gap-2 group"
+                                onClick={() => setShowUserMenu(p => !p)}
+                                title="Account"
+                            >
+                                <User size={20} strokeWidth={1.5} />
+                                <span className="hidden lg:block text-[13px] font-medium tracking-wide text-gray-600 group-hover:text-black">Account</span>
+                            </button>
+                            {showUserMenu && (
+                                <div className="absolute top-[calc(100%+15px)] right-0 min-w-[200px] bg-white border border-gray-100 shadow-[0_10px_40px_-10px_rgba(0,0,0,0.08)] rounded-none overflow-hidden z-[9999] animate-in fade-in zoom-in-95 duration-200">
+                                    {!token ? (
+                                        <>
+                                            <button className="block w-full text-left px-5 py-3.5 text-[13px] cursor-pointer font-light tracking-wide text-gray-600 hover:text-black hover:bg-gray-50 transition-colors" onClick={() => { navigate("/login"); setShowUserMenu(false); }}>Login</button>
+                                            <button className="block w-full text-left px-5 py-3.5 text-[13px] cursor-pointer font-light tracking-wide text-gray-600 hover:text-black hover:bg-gray-50 transition-colors border-t border-gray-50" onClick={() => { navigate("/signup"); setShowUserMenu(false); }}>Create Account</button>
+                                        </>
+                                    ) : (
+                                        <>
+                                            <button className="block w-full text-left px-5 py-3.5 text-[13px] cursor-pointer font-light tracking-wide text-gray-600 hover:text-black hover:bg-gray-50 transition-colors" onClick={() => { navigate("/my-profile"); setShowUserMenu(false); }}>Profile</button>
+                                            <button className="block w-full text-left px-5 py-3.5 text-[13px] cursor-pointer font-light tracking-wide text-gray-600 hover:text-black hover:bg-gray-50 transition-colors border-t border-gray-50" onClick={() => { navigate("/my-orders"); setShowUserMenu(false); }}>Orders</button>
+                                            <button className="block w-full text-left px-5 py-3.5 text-[13px] cursor-pointer font-light tracking-wide text-red-500 hover:bg-red-50/50 transition-colors border-t border-gray-50" onClick={handleLogout}>Sign Out</button>
+                                        </>
+                                    )}
+                                </div>
+                            )}
+                        </div>
+
+                        {/* Cart */}
+                        <button className="text-gray-500 hover:text-black transition-colors cursor-pointer p-1 relative flex items-center gap-2 group" onClick={() => navigate("/cart")} title="Cart">
+                            <ShoppingCart size={20} strokeWidth={1.5} />
+                            <span className="hidden lg:block text-[13px] font-medium tracking-wide text-gray-600 group-hover:text-black">Cart</span>
+                            {cartCount > 0 && (
+                                <span className="absolute -top-1.5 -right-2 lg:right-auto lg:-top-1.5 lg:left-3 bg-black text-white text-[9px] font-medium w-[16px] h-[16px] rounded-full flex items-center justify-center shadow-sm">
+                                    {cartCount}
+                                </span>
+                            )}
+                        </button>
                     </div>
                 </div>
 
                 {/* ── Mobile Menu ── */}
                 {mobileOpen && (
-                    <div className="md:hidden flex flex-col bg-white border-t border-gray-100 shadow-lg max-h-[80vh] overflow-y-auto">
-                        <Link to="/" className="px-5 py-4 border-b border-gray-50 text-[15px] font-medium text-gray-800 hover:bg-gray-50" onClick={() => setMobileOpen(false)}>Home</Link>
+                    <div className="md:hidden flex flex-col bg-white border-t border-gray-100 shadow-[0_20px_40px_-10px_rgba(0,0,0,0.05)] max-h-[80vh] overflow-y-auto">
+                        <Link to="/" className="px-6 py-4 border-b border-gray-50 text-[14px] font-light tracking-wide uppercase text-gray-600 hover:bg-gray-50 hover:text-black transition-colors" onClick={() => setMobileOpen(false)}>Home</Link>
                         {parentCats.map(parent => (
                             <div key={parent._id} className="border-b border-gray-50">
                                 <button
-                                    className="w-full flex items-center justify-between px-5 py-4 text-[15px] font-medium text-gray-800 bg-transparent hover:bg-gray-50 focus:outline-none"
+                                    className="w-full flex items-center justify-between px-6 py-4 text-[14px] font-light tracking-wide uppercase text-gray-600 bg-transparent hover:bg-gray-50 hover:text-black transition-colors focus:outline-none"
                                     onClick={() => setOpenCat(openCat === parent._id ? null : parent._id)}
                                 >
                                     {parent.name}
                                     {childMap[parent._id] && (
-                                        <ChevronDown size={18} className={`transition-transform duration-200 ${openCat === parent._id ? 'rotate-180' : ''}`} />
+                                        <ChevronDown size={16} strokeWidth={1.5} className={`transition-transform duration-300 ${openCat === parent._id ? 'rotate-180' : ''}`} />
                                     )}
                                 </button>
                                 {openCat === parent._id && childMap[parent._id] && (
-                                    <div className="bg-gray-50 flex flex-col py-2">
+                                    <div className="bg-gray-50/50 flex flex-col py-2 border-t border-gray-50">
                                         {childMap[parent._id].map(child => (
                                             <Link
                                                 key={child._id}
                                                 to={`/category/${child._id}`}
-                                                className="pl-9 pr-5 py-3 text-[14px] text-gray-600 hover:text-black hover:bg-gray-100"
+                                                className="pl-10 pr-6 py-3 text-[13px] font-light text-gray-500 hover:text-black hover:bg-white transition-colors"
                                                 onClick={() => setMobileOpen(false)}
                                             >
                                                 {child.name}
@@ -1232,19 +1218,19 @@ export default function Navbar() {
                         ))}
 
                         {/* Mobile User Options */}
-                        <div className="mt-4 mb-6 px-5 border-t border-gray-100 pt-4">
-                            <div className="text-[11px] font-bold text-gray-400 uppercase tracking-wider mb-3">Account</div>
+                        <div className="mt-2 mb-6 px-6 pt-4">
+                            <div className="text-[10px] font-medium text-gray-400 uppercase tracking-widest mb-4">Account</div>
                             {!token ? (
                                 <div className="flex flex-col gap-3">
-                                    <button className="w-full py-2.5 bg-yellow-400 text-black rounded-lg font-semibold text-sm shadow-sm" onClick={() => { navigate("/login"); setMobileOpen(false); }}>Login</button>
-                                    <button className="w-full py-2.5 bg-gray-100 text-gray-800 rounded-lg font-semibold text-sm hover:bg-gray-200" onClick={() => { navigate("/signup"); setMobileOpen(false); }}>Sign Up</button>
+                                    <button className="w-full py-3 bg-black text-white rounded-none font-light tracking-wide text-sm hover:bg-gray-800 transition-colors" onClick={() => { navigate("/login"); setMobileOpen(false); }}>Login</button>
+                                    <button className="w-full py-3 bg-white border border-gray-200 text-black rounded-none font-light tracking-wide text-sm hover:border-gray-400 transition-colors" onClick={() => { navigate("/signup"); setMobileOpen(false); }}>Create Account</button>
                                 </div>
                             ) : (
-                                <div className="flex flex-col bg-gray-50 rounded-xl overflow-hidden border border-gray-100">
-                                    <button className="w-full py-3.5 px-4 text-left text-sm font-medium text-gray-700 border-b border-gray-100 hover:bg-gray-100" onClick={() => { navigate("/my-profile"); setMobileOpen(false); }}>My Profile</button>
-                                    <button className="w-full py-3.5 px-4 text-left text-sm font-medium text-gray-700 border-b border-gray-100 hover:bg-gray-100" onClick={() => { navigate("/my-orders"); setMobileOpen(false); }}>My Orders</button>
-                                    <button className="w-full py-3.5 px-4 text-left text-sm font-medium text-red-500 hover:bg-red-50 flex items-center justify-between" onClick={handleLogout}>
-                                        Logout
+                                <div className="flex flex-col border border-gray-100">
+                                    <button className="w-full py-3.5 px-5 text-left text-[13px] font-light tracking-wide text-gray-600 border-b border-gray-50 hover:bg-gray-50 transition-colors" onClick={() => { navigate("/my-profile"); setMobileOpen(false); }}>Profile</button>
+                                    <button className="w-full py-3.5 px-5 text-left text-[13px] font-light tracking-wide text-gray-600 border-b border-gray-50 hover:bg-gray-50 transition-colors" onClick={() => { navigate("/my-orders"); setMobileOpen(false); }}>Orders</button>
+                                    <button className="w-full py-3.5 px-5 text-left text-[13px] font-light tracking-wide text-red-500 hover:bg-red-50/50 transition-colors" onClick={handleLogout}>
+                                        Sign Out
                                     </button>
                                 </div>
                             )}
@@ -1256,13 +1242,13 @@ export default function Navbar() {
 
             {/* ── Pincode Modal ── */}
             {showModal && (
-                <div className="fixed inset-0 bg-black/60 backdrop-blur-[2px] flex items-center justify-center z-[9999] p-4 transition-all duration-200" onClick={() => setShowModal(false)}>
-                    <div className="bg-white rounded-2xl p-6 shadow-2xl w-full max-w-[340px] animate-in slide-in-from-bottom-4 zoom-in-95 duration-200" onClick={e => e.stopPropagation()}>
-                        <h3 className="text-lg font-bold text-gray-900 mb-1 flex items-center gap-2">
-                            <MapPin size={22} className="text-yellow-500" />
+                <div className="fixed inset-0 bg-white/80 backdrop-blur-sm flex items-center justify-center z-[9999] p-4 transition-all duration-300" onClick={() => setShowModal(false)}>
+                    <div className="bg-white border border-gray-100 p-8 shadow-[0_20px_60px_-15px_rgba(0,0,0,0.1)] w-full max-w-[380px] animate-in fade-in zoom-in-95 duration-300" onClick={e => e.stopPropagation()}>
+                        <h3 className="text-lg font-light tracking-wide text-black mb-2 flex items-center gap-2">
+                            <MapPin size={20} strokeWidth={1.5} className="text-gray-400" />
                             Enter Pincode
                         </h3>
-                        <p className="text-[13px] text-gray-500 mb-5 leading-relaxed">Check delivery availability in your area</p>
+                        <p className="text-[13px] text-gray-500 font-light mb-6">Check delivery availability in your area</p>
 
                         <input
                             type="text"
@@ -1272,19 +1258,19 @@ export default function Navbar() {
                             placeholder="e.g. 226001"
                             maxLength={6}
                             autoFocus
-                            className="w-full px-4 py-3 border border-gray-200 rounded-xl text-sm transition-all focus:border-yellow-400 focus:ring-2 focus:ring-yellow-400/20 focus:outline-none placeholder:text-gray-400"
+                            className="w-full px-4 py-3.5 bg-gray-50/50 border border-gray-200 text-[14px] font-light tracking-widest transition-all focus:border-black focus:bg-white focus:outline-none placeholder:text-gray-400 placeholder:tracking-normal text-center"
                         />
-                        {pinError && <div className="text-[13px] text-red-500 mt-2.5 font-medium flex items-center gap-1.5"><X size={14} /> {pinError.replace('❌ ', '')}</div>}
+                        {pinError && <div className="text-[12px] text-red-500 mt-3 font-light tracking-wide flex items-center justify-center gap-1.5"><X size={14} strokeWidth={1.5} /> {pinError.replace('❌ ', '')}</div>}
 
-                        <div className="flex gap-3 mt-6">
+                        <div className="flex gap-3 mt-8">
                             <button
-                                className="flex-1 py-3 bg-gray-50 text-gray-700 rounded-xl font-semibold text-sm hover:bg-gray-100 transition-colors focus:outline-none"
+                                className="flex-1 py-3.5 bg-white border border-gray-200 text-gray-600 font-light tracking-wide text-[13px] hover:border-gray-400 hover:text-black transition-colors focus:outline-none"
                                 onClick={() => setShowModal(false)}
                             >
                                 Cancel
                             </button>
                             <button
-                                className="flex-1 py-3 bg-yellow-400 text-black rounded-xl font-bold text-sm hover:bg-yellow-500 transition-colors focus:outline-none shadow-[0_4px_14px_rgba(250,204,21,0.4)]"
+                                className="flex-1 py-3.5 bg-black text-white font-light tracking-wide text-[13px] hover:bg-gray-800 transition-colors focus:outline-none"
                                 onClick={handlePinSubmit}
                             >
                                 Check & Save

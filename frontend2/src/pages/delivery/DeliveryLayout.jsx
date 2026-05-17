@@ -72,7 +72,8 @@ const DeliveryLayout = () => {
       <div className={`fixed inset-y-0 left-0 w-64 bg-white border-r transform transition-transform duration-300 z-30 lg:translate-x-0 lg:static ${sidebarOpen ? "translate-x-0" : "-translate-x-full"}`}>
 
         {/* LOGO */}
-        <div className="flex items-center px-6 h-16 border-b">
+        <div className="flex items-center gap-3 px-6 h-20 border-b">
+          <img src="/logo2.png" alt="DigitalInfratech Logo" className="h-10 w-auto object-contain" />
           <span className="text-xl font-semibold text-gray-800">
             DigitalInfratech
           </span>

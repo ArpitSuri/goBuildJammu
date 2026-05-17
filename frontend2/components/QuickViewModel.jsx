@@ -62,8 +62,8 @@ export default function QuickViewModal({ product, onClose }) {
                                         onClick={() => setSelected(v)}
                                         className={`px-3 py-1 border rounded text-sm transition-colors
                       ${selected?._id === v._id
-                                                ? "bg-yellow-400 border-yellow-400 text-black font-semibold"
-                                                : "bg-white hover:border-yellow-400"
+                                                ? "bg-blue-600 border-blue-600 text-black font-semibold"
+                                                : "bg-white hover:border-blue-600"
                                             }`}
                                     >
                                         {v.attributes
@@ -97,7 +97,7 @@ export default function QuickViewModal({ product, onClose }) {
                         )}
 
                         {/* ACTION */}
-                        <button className="bg-yellow-400 hover:bg-yellow-500 text-black font-bold w-full py-2 rounded-lg transition">
+                        <button className="bg-blue-600 hover:bg-blue-700 text-black font-bold w-full py-2 rounded-lg transition">
                             Add to Cart
                         </button>
                     </>

@@ -218,235 +218,70 @@ export default function ProductCard({ product }) {
     const isSoldOut = selectedVariant ? selectedVariant.stock <= 0 : false;
 
     return (
-        <>
-            <style>{`
-                .hr-pc {
-                    display: flex;
-                    flex-direction: column;
-                    background: #fff;
-                    border: 1px solid #e8e8e8;
-                    border-radius: 10px;
-                    overflow: hidden;
-                    cursor: pointer;
-                    transition: box-shadow 0.22s ease, transform 0.22s ease;
-                    position: relative;
-                    font-family: 'Inter', sans-serif;
-                }
-                .hr-pc:hover {
-                    box-shadow: 0 8px 28px rgba(0,0,0,0.1);
-                    transform: translateY(-2px);
-                }
-                .hr-pc-img-wrap {
-                    position: relative;
-                    height: 200px;
-                    background: #fff;
-                    display: flex;
-                    align-items: center;
-                    justify-content: center;
-                    padding: 16px;
-                    border-bottom: 1px solid #f0f0f0;
-                }
-                .hr-pc-img-wrap img {
-                    width: 100%;
-                    height: 100%;
-                    object-fit: contain;
-                }
-                .hr-pc-badge {
-                    position: absolute;
-                    top: 10px;
-                    left: 10px;
-                    background: #FFD700;
-                    color: #111;
-                    font-size: 11px;
-                    font-weight: 700;
-                    padding: 3px 8px;
-                    border-radius: 4px;
-                    z-index: 2;
-                }
-                .hr-pc-soldout-overlay {
-                    position: absolute;
-                    inset: 0;
-                    background: rgba(255,255,255,0.65);
-                    display: flex;
-                    align-items: center;
-                    justify-content: center;
-                    z-index: 3;
-                }
-                .hr-pc-soldout-tag {
-                    background: #dc2626;
-                    color: #fff;
-                    font-size: 12px;
-                    font-weight: 700;
-                    padding: 6px 14px;
-                    border-radius: 4px;
-                    letter-spacing: 0.5px;
-                }
-                .hr-pc-body {
-                    padding: 12px 14px;
-                    display: flex;
-                    flex-direction: column;
-                    flex-grow: 1;
-                }
-                .hr-pc-name {
-                    font-size: 13.5px;
-                    font-weight: 600;
-                    color: #111;
-                    line-height: 1.35;
-                    min-height: 36px;
-                    overflow: hidden;
-                    display: -webkit-box;
-                    -webkit-line-clamp: 2;
-                    -webkit-box-orient: vertical;
-                    margin: 0 0 10px;
-                }
-                .hr-pc-prices {
-                    display: flex;
-                    align-items: baseline;
-                    gap: 8px;
-                    margin-bottom: 10px;
-                }
-                .hr-pc-price-main {
-                    font-size: 16px;
-                    font-weight: 700;
-                    color: #111;
-                }
-                .hr-pc-price-old {
-                    font-size: 13px;
-                    color: #aaa;
-                    text-decoration: line-through;
-                }
-                /* Variant selector */
-                .hr-pc-select {
-                    width: 100%;
-                    border: 1.5px solid #22c55e;
-                    border-radius: 6px;
-                    padding: 6px 8px;
-                    font-size: 12px;
-                    font-family: 'Inter', sans-serif;
-                    color: #333;
-                    background: #fff;
-                    outline: none;
-                    cursor: pointer;
-                    margin-bottom: 10px;
-                }
-                .hr-pc-select:focus { border-color: #16a34a; }
-                /* Qty + Add row */
-                .hr-pc-actions {
-                    display: flex;
-                    gap: 8px;
-                    margin-top: auto;
-                }
-                .hr-pc-qty {
-                    display: flex;
-                    align-items: center;
-                    border: 1.5px solid #22c55e;
-                    border-radius: 6px;
-                    overflow: hidden;
-                    min-width: 70px;
-                }
-                .hr-pc-qty-btn {
-                    background: #f0fdf4;
-                    border: none;
-                    width: 26px;
-                    height: 34px;
-                    font-size: 16px;
-                    cursor: pointer;
-                    color: #16a34a;
-                    font-weight: 700;
-                    display: flex;
-                    align-items: center;
-                    justify-content: center;
-                    transition: background 0.15s;
-                    padding: 0;
-                    flex-shrink: 0;
-                }
-                .hr-pc-qty-btn:hover:not(:disabled) { background: #dcfce7; }
-                .hr-pc-qty-btn:disabled { opacity: 0.4; cursor: not-allowed; }
-                .hr-pc-qty-val {
-                    flex: 1;
-                    text-align: center;
-                    font-size: 14px;
-                    font-weight: 600;
-                    color: #111;
-                    padding: 0 2px;
-                }
-                .hr-pc-add-btn {
-                    flex: 1;
-                    background: #16a34a;
-                    color: #fff;
-                    border: none;
-                    border-radius: 6px;
-                    font-size: 14px;
-                    font-weight: 700;
-                    cursor: pointer;
-                    font-family: 'Inter', sans-serif;
-                    letter-spacing: 0.3px;
-                    transition: background 0.2s;
-                    height: 36px;
-                }
-                .hr-pc-add-btn:hover:not(:disabled) { background: #15803d; }
-                .hr-pc-add-btn.added { background: #0d9488; }
-                .hr-pc-add-btn:disabled { background: #9ca3af; cursor: not-allowed; }
-                .hr-pc-no-img {
-                    width: 100%;
-                    height: 100%;
-                    background: #f5f5f5;
-                    display: flex;
-                    align-items: center;
-                    justify-content: center;
-                    color: #ccc;
-                    font-size: 12px;
-                }
-            `}</style>
+        <div
+            className="flex flex-col bg-white border border-gray-100 hover:border-gray-200 hover:shadow-[0_20px_40px_-15px_rgba(0,0,0,0.05)] rounded-3xl cursor-pointer transition-all duration-300 relative font-sans group overflow-hidden"
+            onClick={() => navigate(`/product/${product._id}`)}
+        >
+            {/* Top Image Box */}
+            <div className="relative h-[240px] bg-gray-50/50 flex items-center justify-center p-6 overflow-hidden">
+                {/* OFF Badge */}
+                {discountPercent > 0 && !isSoldOut && (
+                    <div className="absolute top-3 left-3 bg-white border border-gray-100 text-black text-[10px] font-medium tracking-widest px-3 py-1.5 z-10 shadow-sm rounded-full">
+                        {discountPercent}% OFF
+                    </div>
+                )}
 
-            <div
-                className="hr-pc"
-                onClick={() => navigate(`/product/${product._id}`)}
-            >
-                {/* Image */}
-                <div className="hr-pc-img-wrap">
-                    {discountPercent > 0 && !isSoldOut && (
-                        <div className="hr-pc-badge">{discountPercent}% OFF</div>
-                    )}
-                    {isSoldOut && (
-                        <div className="hr-pc-soldout-overlay">
-                            <span className="hr-pc-soldout-tag">SOLD OUT</span>
-                        </div>
-                    )}
-                    {product.images && product.images.length > 0 ? (
-                        <img
-                            src={product.images[0].url}
-                            alt={product.name}
-                            style={{ filter: isSoldOut ? "grayscale(1)" : "none" }}
-                        />
-                    ) : (
-                        <div className="hr-pc-no-img">NO IMAGE</div>
-                    )}
-                </div>
-
-                {/* Body */}
-                <div className="hr-pc-body">
-                    <p className="hr-pc-name">{product.name}</p>
-
-                    <div className="hr-pc-prices">
-                        {originalPrice && (
-                            <span className="hr-pc-price-old">Rs. {originalPrice.toLocaleString()}</span>
-                        )}
-                        <span className="hr-pc-price-main">
-                            {actualPrice ? `Rs. ${actualPrice.toLocaleString()}` : "Price N/A"}
+                {/* SOLD OUT Overlay */}
+                {isSoldOut && (
+                    <div className="absolute inset-0 bg-white/80 backdrop-blur-[1px] flex items-center justify-center z-20">
+                        <span className="bg-white border border-gray-200 text-black text-[11px] font-medium tracking-widest uppercase px-5 py-2 shadow-sm rounded-full">
+                            SOLD OUT
                         </span>
                     </div>
+                )}
 
-                    {/* Variant select */}
+                {/* Product Image */}
+                {product.images && product.images.length > 0 ? (
+                    <img
+                        src={product.images[0].url}
+                        alt={product.name}
+                        className={`w-full h-full object-contain mix-blend-multiply transition-transform duration-500 group-hover:scale-105 ${isSoldOut ? 'grayscale opacity-60' : ''}`}
+                    />
+                ) : (
+                    <div className="w-full h-full flex items-center justify-center text-gray-300 text-[11px] font-light tracking-widest uppercase">No Image</div>
+                )}
+            </div>
+
+            {/* Content Body */}
+            <div className="p-6 flex flex-col flex-grow">
+                <h3 className="text-[15px] font-medium text-gray-800 leading-relaxed min-h-[44px] overflow-hidden line-clamp-2 mb-3">
+                    {product.name}
+                </h3>
+
+                <div className="flex items-center gap-3 mb-5">
+                    {originalPrice && (
+                        <span className="text-[13px] text-gray-400 line-through font-light">
+                            Rs. {originalPrice.toLocaleString()}
+                        </span>
+                    )}
+                    <span className="text-[16px] font-semibold text-black">
+                        {actualPrice ? `Rs. ${actualPrice.toLocaleString()}` : "Price N/A"}
+                    </span>
+                </div>
+
+                <div className="flex-grow"></div>
+
+                <div onClick={(e) => e.stopPropagation()} className="mt-4 space-y-4">
+                    {/* Variant Selector */}
                     {variants.length > 1 && (
-                        <div onClick={e => e.stopPropagation()}>
+                        <div className="relative">
                             <select
-                                className="hr-pc-select"
                                 value={selectedVariant?._id || ""}
-                                onChange={e => {
+                                onChange={(e) => {
                                     const v = variants.find(v => v._id === e.target.value);
                                     if (v) setSelectedVariant(v);
                                 }}
+                                className="w-full appearance-none border border-gray-200 bg-gray-50/50 hover:bg-white hover:border-gray-300 rounded-full pl-4 pr-10 py-2.5 text-[13px] font-medium tracking-wide text-gray-700 focus:outline-none focus:border-black transition-all cursor-pointer shadow-sm"
                             >
                                 {variants.map(v => (
                                     <option key={v._id} value={v._id}>
@@ -455,34 +290,47 @@ export default function ProductCard({ product }) {
                                     </option>
                                 ))}
                             </select>
+                            <svg className="absolute right-4 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" />
+                            </svg>
                         </div>
                     )}
 
-                    {/* Add to cart row */}
-                    <div className="hr-pc-actions" onClick={e => e.stopPropagation()}>
-                        <div className="hr-pc-qty">
-                            <button
-                                className="hr-pc-qty-btn"
+                    {/* Quantity & Add Button */}
+                    <div className="flex gap-2.5">
+                        <div className="flex items-center justify-between border border-gray-200 w-[85px] px-1 py-0 bg-white rounded-full shadow-sm hover:border-gray-300 transition-colors shrink-0">
+                            <button 
+                                onClick={() => !isSoldOut && setQuantity(q => Math.max(1, q - 1))} 
                                 disabled={quantity <= 1 || isSoldOut}
-                                onClick={() => setQuantity(q => Math.max(1, q - 1))}
-                            >−</button>
-                            <span className="hr-pc-qty-val">{quantity}</span>
-                            <button
-                                className="hr-pc-qty-btn"
+                                className="text-gray-400 hover:text-black w-7 h-11 flex items-center justify-center cursor-pointer disabled:opacity-30 disabled:cursor-not-allowed transition-colors font-medium text-lg"
+                            >
+                                −
+                            </button>
+                            <span className="text-[13px] font-medium text-black">{quantity}</span>
+                            <button 
+                                onClick={() => !isSoldOut && setQuantity(q => q + 1)} 
                                 disabled={isSoldOut}
-                                onClick={() => setQuantity(q => q + 1)}
-                            >+</button>
+                                className="text-gray-400 hover:text-black w-7 h-11 flex items-center justify-center cursor-pointer disabled:opacity-30 disabled:cursor-not-allowed transition-colors font-medium text-lg"
+                            >
+                                +
+                            </button>
                         </div>
                         <button
-                            className={`hr-pc-add-btn${added ? " added" : ""}`}
                             onClick={handleAddToCart}
                             disabled={loading || isSoldOut || variants.length === 0}
+                            className={`flex-grow border h-11 flex items-center justify-center px-2 text-[10px] xl:text-[11px] font-bold tracking-widest uppercase whitespace-nowrap transition-all duration-300 rounded-full shadow-md hover:shadow-lg hover:-translate-y-[1px] ${
+                                added 
+                                ? 'bg-white border-black text-black' 
+                                : isSoldOut || variants.length === 0
+                                    ? 'bg-gray-100 border-gray-100 text-gray-400 cursor-not-allowed shadow-none hover:-translate-y-0'
+                                    : 'bg-black border-black text-white hover:bg-gray-900'
+                            }`}
                         >
-                            {loading ? "..." : added ? "✓ ADDED" : isSoldOut ? "OUT OF STOCK" : "ADD"}
+                            {loading ? "..." : added ? "Added" : isSoldOut ? "Sold Out" : "Add to Cart"}
                         </button>
                     </div>
                 </div>
             </div>
-        </>
+        </div>
     );
 }

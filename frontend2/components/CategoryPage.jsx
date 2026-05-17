@@ -44,41 +44,54 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { Helmet } from "react-helmet-async"; // Import Helmet
 import { getProducts } from "../services/productService";
+import { getCategories } from "../services/categoryService";
 import ProductCard from "./ProductCard";
 
 export default function CategoryPage() {
-    const { id } = useParams(); // 'id' usually represents the category name or slug
+    const { id } = useParams(); // 'id' is the MongoDB category _id
     const [products, setProducts] = useState([]);
-    // Fallback title agar products load nahi hue
     const [displayTitle, setDisplayTitle] = useState("Loading...");
 
-    // Format the category name for the UI (e.g., "building-materials" -> "Building Materials")
-    const categoryTitle = id ? id.replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase()) : "Products";
+    const categoryTitle = displayTitle !== "Loading..." ? displayTitle : "Products";
     const siteUrl = `https://www.digitalinfratech.in/category/${id}`;
-    
+
+    // Fetch category name directly from categories API
+    const fetchCategoryName = async () => {
+        try {
+            const { data } = await getCategories();
+            const allCats = data.categories || [];
+            const found = allCats.find(c => c._id === id);
+            if (found) {
+                setDisplayTitle(found.name);
+            }
+        } catch (err) {
+            console.error("Failed to fetch category name", err);
+        }
+    };
 
     const fetchProducts = async () => {
         try {
             const { data } = await getProducts({ category: id });
             setProducts(data.products);
 
-            // Yahan se asli category name uthao
-            if (data.products.length > 0) {
+            // If we still don't have a title, try to get it from products
+            if (displayTitle === "Loading..." && data.products.length > 0) {
                 setDisplayTitle(data.products[0].category.name);
-            } else {
-                // Agar products nahi mile toh URL slug ko format karlo
-                setDisplayTitle(id.replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase()));
             }
         } catch (err) {
             console.error(err);
         }
     };
+
     useEffect(() => {
-        if (id) fetchProducts();
+        if (id) {
+            fetchCategoryName();
+            fetchProducts();
+        }
     }, [id]);
 
     return (
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 py-6">
+        <div className="max-w-[1400px] mx-auto w-full px-6 md:px-12 lg:px-20 py-16 font-sans min-h-screen">
             <Helmet>
                 {/* Dynamic Title and Description for Lucknow Market */}
                 <title>{`${displayTitle} in Lucknow | Digital Infratech`}</title>
@@ -112,14 +125,19 @@ export default function CategoryPage() {
                 </script>
             </Helmet>
 
-            <h1 className="text-lg sm:text-xl md:text-2xl font-semibold mb-4 capitalize">
-                {displayTitle}
-            </h1>
+            <div className="mb-10 text-center md:text-left">
+                <h1 className="text-2xl lg:text-3xl font-light text-black tracking-tight capitalize mb-2">
+                    {displayTitle}
+                </h1>
+                <div className="h-[1px] w-12 bg-black mx-auto md:mx-0"></div>
+            </div>
 
             {products.length === 0 ? (
-                <p className="text-sm sm:text-base">No products found</p>
+                <div className="flex flex-col items-center justify-center py-20">
+                    <p className="text-[14px] font-light text-gray-500 uppercase tracking-widest">No products found</p>
+                </div>
             ) : (
-                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+                <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 lg:gap-8">
                     {products.map(p => (
                         <ProductCard key={p._id} product={p} />
                     ))}

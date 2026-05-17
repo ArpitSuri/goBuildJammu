@@ -241,7 +241,7 @@ export const updateStock = async (req, res) => {
     }
 };
 
-export const getTopDiscountVariants = async () => {
+export const getTopDiscountVariants = async (req, res) => {
     try {
         const variants = await Variant.aggregate([
             {
@@ -289,8 +289,8 @@ export const getTopDiscountVariants = async () => {
             }
         ]);
 
-        return variants;
+        res.status(200).json({ variants });
     } catch (error) {
-        throw error;
+        res.status(500).json({ message: error.message });
     }
 };
