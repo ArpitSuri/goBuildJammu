@@ -1101,14 +1101,14 @@ export default function Navbar() {
                                     {parent.name}
                                 </span>
                                 {childMap[parent._id] && (
-                                    <div className="absolute top-full left-1/2 -translate-x-1/2 mt-5 min-w-[200px] bg-white shadow-[0_20px_40px_-10px_rgba(0,0,0,0.05)] border border-gray-100 opacity-0 invisible group-hover:opacity-100 group-hover:visible translate-y-2 group-hover:translate-y-0 transition-all duration-300 z-[999] p-2">
+                                    <div className="absolute top-full left-1/2 -translate-x-1/2 mt-5 min-w-[200px] bg-white shadow-[0_20px_40px_-10px_rgba(0,0,0,0.05)] border border-gray-100 opacity-0 invisible group-hover:opacity-100 group-hover:visible translate-y-2 group-hover:translate-y-0 transition-all duration-300 z-[999] p-2 rounded-2xl overflow-hidden">
                                         {/* Invisible area to connect hover */}
                                         <div className="absolute -top-5 left-0 right-0 h-5 bg-transparent"></div>
                                         {childMap[parent._id].map((child) => (
                                             <Link
                                                 key={child._id}
                                                 to={`/category/${child._id}`}
-                                                className="block px-4 py-2.5 text-[13px] font-light text-gray-500 hover:text-black hover:bg-gray-50/50 transition-colors duration-200 text-center whitespace-nowrap"
+                                                className="block px-4 py-2.5 text-[13px] font-light text-gray-500 hover:text-black hover:bg-gray-50/50 rounded-xl transition-colors duration-200 text-center whitespace-nowrap"
                                             >
                                                 {child.name}
                                             </Link>
@@ -1155,7 +1155,7 @@ export default function Navbar() {
                                 <span className="hidden lg:block text-[13px] font-medium tracking-wide text-gray-600 group-hover:text-black">Account</span>
                             </button>
                             {showUserMenu && (
-                                <div className="absolute top-[calc(100%+15px)] right-0 min-w-[200px] bg-white border border-gray-100 shadow-[0_10px_40px_-10px_rgba(0,0,0,0.08)] rounded-none overflow-hidden z-[9999] animate-in fade-in zoom-in-95 duration-200">
+                                <div className="absolute top-[calc(100%+15px)] right-0 min-w-[200px] bg-white border border-gray-100 shadow-[0_10px_40px_-10px_rgba(0,0,0,0.08)] rounded-2xl overflow-hidden z-[9999] animate-in fade-in zoom-in-95 duration-200">
                                     {!token ? (
                                         <>
                                             <button className="block w-full text-left px-5 py-3.5 text-[13px] cursor-pointer font-light tracking-wide text-gray-600 hover:text-black hover:bg-gray-50 transition-colors" onClick={() => { navigate("/login"); setShowUserMenu(false); }}>Login</button>
@@ -1243,8 +1243,8 @@ export default function Navbar() {
             {/* ── Pincode Modal ── */}
             {showModal && (
                 <div className="fixed inset-0 bg-white/80 backdrop-blur-sm flex items-center justify-center z-[9999] p-4 transition-all duration-300" onClick={() => setShowModal(false)}>
-                    <div className="bg-white border border-gray-100 p-8 shadow-[0_20px_60px_-15px_rgba(0,0,0,0.1)] w-full max-w-[380px] animate-in fade-in zoom-in-95 duration-300" onClick={e => e.stopPropagation()}>
-                        <h3 className="text-lg font-light tracking-wide text-black mb-2 flex items-center gap-2">
+                    <div className="bg-white border border-gray-100 p-8 rounded-3xl shadow-[0_20px_60px_-15px_rgba(0,0,0,0.1)] w-full max-w-[380px] animate-in fade-in zoom-in-95 duration-300" onClick={e => e.stopPropagation()}>
+                        <h3 className="text-lg font-semibold tracking-tight text-black mb-2 flex items-center gap-2">
                             <MapPin size={20} strokeWidth={1.5} className="text-gray-400" />
                             Enter Pincode
                         </h3>
@@ -1258,19 +1258,19 @@ export default function Navbar() {
                             placeholder="e.g. 226001"
                             maxLength={6}
                             autoFocus
-                            className="w-full px-4 py-3.5 bg-gray-50/50 border border-gray-200 text-[14px] font-light tracking-widest transition-all focus:border-black focus:bg-white focus:outline-none placeholder:text-gray-400 placeholder:tracking-normal text-center"
+                            className="w-full px-5 py-3.5 bg-gray-50/50 border border-gray-200 rounded-full text-[14px] font-medium tracking-widest transition-all focus:border-black focus:bg-white focus:outline-none placeholder:text-gray-400 placeholder:tracking-normal text-center shadow-sm"
                         />
                         {pinError && <div className="text-[12px] text-red-500 mt-3 font-light tracking-wide flex items-center justify-center gap-1.5"><X size={14} strokeWidth={1.5} /> {pinError.replace('❌ ', '')}</div>}
 
                         <div className="flex gap-3 mt-8">
                             <button
-                                className="flex-1 py-3.5 bg-white border border-gray-200 text-gray-600 font-light tracking-wide text-[13px] hover:border-gray-400 hover:text-black transition-colors focus:outline-none"
+                                className="flex-1 py-3.5 bg-white border border-gray-200 text-gray-600 font-medium tracking-wide text-[13px] rounded-full hover:border-gray-400 hover:text-black transition-colors focus:outline-none cursor-pointer"
                                 onClick={() => setShowModal(false)}
                             >
                                 Cancel
                             </button>
                             <button
-                                className="flex-1 py-3.5 bg-black text-white font-light tracking-wide text-[13px] hover:bg-gray-800 transition-colors focus:outline-none"
+                                className="flex-1 py-3.5 bg-black text-white font-medium tracking-wide text-[13px] rounded-full hover:bg-gray-800 transition-colors focus:outline-none cursor-pointer shadow-md"
                                 onClick={handlePinSubmit}
                             >
                                 Check & Save

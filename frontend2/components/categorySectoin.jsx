@@ -94,7 +94,7 @@ export function CategoriesSection() {
                     <Link
                         to={`/category/${cat._id}`}
                         key={cat._id}
-                        className="group flex flex-col items-center p-6 border border-gray-100 bg-white hover:shadow-lg transition-all duration-300 ease-out cursor-pointer"
+                        className="group flex flex-col items-center p-6 border border-gray-100 bg-white rounded-2xl hover:shadow-lg transition-all duration-300 ease-out cursor-pointer"
                     >
                         <div className="w-20 h-20 md:w-24 md:h-24 flex items-center justify-center mb-6 overflow-hidden">
                             <img

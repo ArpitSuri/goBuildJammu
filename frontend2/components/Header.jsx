@@ -64,13 +64,13 @@ export function HeroSection() {
             
             {/* Nav Arrows */}
             <button 
-                className="absolute left-4 md:left-8 top-1/2 -translate-y-1/2 w-12 h-12 flex items-center justify-center bg-white border border-gray-200 text-gray-500 hover:text-black opacity-0 group-hover:opacity-100 transition-all duration-500 z-20 cursor-pointer shadow-sm hover:shadow-md"
+                className="absolute left-4 md:left-8 top-1/2 -translate-y-1/2 w-12 h-12 flex items-center justify-center bg-white border border-gray-200 rounded-full text-gray-500 hover:text-black opacity-0 group-hover:opacity-100 transition-all duration-500 z-20 cursor-pointer shadow-sm hover:shadow-md"
                 onClick={() => goTo((current - 1 + SLIDES.length) % SLIDES.length)}
             >
                 <ArrowLeft size={20} strokeWidth={1} />
             </button>
             <button 
-                className="absolute right-4 md:right-8 top-1/2 -translate-y-1/2 w-12 h-12 flex items-center justify-center bg-white border border-gray-200 text-gray-500 hover:text-black opacity-0 group-hover:opacity-100 transition-all duration-500 z-20 cursor-pointer shadow-sm hover:shadow-md"
+                className="absolute right-4 md:right-8 top-1/2 -translate-y-1/2 w-12 h-12 flex items-center justify-center bg-white border border-gray-200 rounded-full text-gray-500 hover:text-black opacity-0 group-hover:opacity-100 transition-all duration-500 z-20 cursor-pointer shadow-sm hover:shadow-md"
                 onClick={() => goTo((current + 1) % SLIDES.length)}
             >
                 <ArrowRight size={20} strokeWidth={1} />
@@ -80,7 +80,7 @@ export function HeroSection() {
                 
                 {/* Text Content */}
                 <div className={`flex-1 flex flex-col items-start transition-all duration-700 transform ${fade ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
-                    <div className="inline-block border border-gray-200 px-3.5 py-1.5 text-[10px] font-medium tracking-[0.2em] uppercase mb-8 text-gray-600 bg-white shadow-sm">
+                    <div className="inline-block border border-gray-200 px-4 py-2 rounded-full text-[10px] font-medium tracking-[0.2em] uppercase mb-8 text-gray-600 bg-white shadow-sm">
                         {slide.badge}
                     </div>
                     
@@ -94,7 +94,7 @@ export function HeroSection() {
                     
                     <button 
                         onClick={() => navigate(slide.ctaLink)}
-                        className="bg-black text-white px-8 py-4 text-[12px] font-medium tracking-[0.15em] uppercase hover:bg-white hover:text-black border border-black transition-all duration-300 cursor-pointer shadow-lg shadow-black/10 hover:shadow-none"
+                        className="bg-black text-white px-10 py-4 rounded-full text-[12px] font-bold tracking-[0.15em] uppercase hover:bg-gray-900 border border-black transition-all duration-300 cursor-pointer shadow-lg shadow-black/10 hover:shadow-xl hover:-translate-y-[1px]"
                     >
                         {slide.cta}
                     </button>
@@ -102,14 +102,14 @@ export function HeroSection() {
 
                 {/* Image Content */}
                 <div className={`flex-1 w-full max-w-xl transition-all duration-700 transform ${fade ? 'opacity-100 scale-100' : 'opacity-0 scale-95'}`}>
-                    <div className="relative aspect-[4/3] w-full overflow-hidden bg-gray-100 shadow-[0_20px_60px_-15px_rgba(0,0,0,0.1)]">
+                    <div className="relative aspect-[4/3] w-full overflow-hidden bg-gray-100 rounded-3xl shadow-[0_20px_60px_-15px_rgba(0,0,0,0.1)]">
                         <img 
                             src={slide.image} 
                             alt={slide.title} 
                             className={`w-full h-full object-cover object-center transition-transform duration-[10s] ease-linear ${fade ? 'scale-105' : 'scale-100'}`}
                         />
                         {/* Minimal border frame inside image */}
-                        <div className="absolute inset-4 border border-white/20 pointer-events-none mix-blend-overlay"></div>
+                        <div className="absolute inset-4 border border-white/20 rounded-2xl pointer-events-none mix-blend-overlay"></div>
                     </div>
                 </div>
 
