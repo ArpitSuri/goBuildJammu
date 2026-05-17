@@ -11,7 +11,10 @@ const Footer = () => {
                   
                   {/* Brand & Mission */}
                   <div className="max-w-md">
-                      <img src="/logo2.png" alt="DigitalInfratech Logo" className="h-12 mb-6" />
+                      <div className="flex items-center gap-3 mb-6">
+                          <img src="/Logocropped.png" alt="Digital Infratech Logo" className="h-10 w-auto object-contain" />
+                          <span className="text-lg font-bold tracking-widest uppercase text-black">Digital Infratech</span>
+                      </div>
                       <p className="text-[14px] text-gray-600 font-medium leading-relaxed mb-8">
                           Premium building materials, delivered directly to your doorstep. We are committed to providing the highest quality infrastructure supplies for your projects across Lucknow.
                       </p>
